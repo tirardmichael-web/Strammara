@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Strammara — IA pour tous</title>
+<meta name="description" content="Applications gratuites pour démocratiser l'intelligence artificielle. Créez, testez, partagez." />
+<style>
+/* ============================================================
+     CSS — Strammara v1
+     ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;--surface:#121212;--card:#1a1a1a;--border:#2a2a2a;
+  --accent:#00ff88;--accent2:#0066ff;--text:#f0f0f0;--muted:#777;
+  --warn:#ffaa00;--err:#ff4444;--gold:#ffd700
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:'Inter','Segoe UI',Arial,sans-serif;
+  min-height:100vh;overflow-x:hidden
+}
+a{color:var(--accent);text-decoration:none;transition:color .2s}
+a:hover{color:var(--gold)}
+
+/* ---------- NAV ---------- */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,10,10,.85);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);padding:0 1.5rem;height:60px;
+  display:flex;align-items:center;justify-content:space-between
+}
+.nav-logo{font-size:18px;font-weight:800;letter-spacing:-.5px}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:1.5rem;list-style:none;font-size:13px;font-weight:500}
+.nav-links a{color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.hamburger{display:none;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer}
+
+/* ---------- HERO ---------- */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:100px 1.5rem 80px;max-width:900px;margin:0 auto;position:relative
+}
+.hero::before{
+  content:'';position:absolute;top:-20%;left:-20%;width:140%;height:140%;
+  background:radial-gradient(ellipse at 30% 50%, rgba(0,255,136,.06) 0%, transparent 60%);
+  pointer-events:none
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);
+  padding:6px 14px;border-radius:50px;font-size:11px;font-weight:600;
+  letter-spacing:.5px;color:var(--accent);margin-bottom:2rem;width:fit-content
+}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:800;line-height:1.1;margin-bottom:1.2rem;letter-spacing:-1.5px}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:clamp(1rem,2vw,1.2rem);color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:2.5rem}
+
+/* ---------- BOUTONS ---------- */
+.btn-group{display:flex;gap:12px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 28px;border-radius:8px;font-weight:600;font-size:14px;
+  border:none;cursor:pointer;transition:all .2s;text-decoration:none;white-space:nowrap
+}
+.btn:hover{opacity:.88;transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:#000}
+.btn-secondary{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ghost{background:transparent;color:var(--muted);padding:12px 16px}
+.btn-ghost:hover{color:var(--text)}
+
+/* ---------- SECTION ---------- */
+section{padding:80px 1.5rem;max-width:900px;margin:0 auto}
+.section-label{
+  font-size:11px;font-weight:700;letter-spacing:2px;color:var(--accent);
+  text-transform:uppercase;margin-bottom:8px
+}
+.section-title{font-size:clamp(1.5rem,3vw,2rem);font-weight:700;margin-bottom:1rem}
+.section-sub{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:2.5rem;max-width:600px}
+
+/* ---------- APP CARD ---------- */
+.app-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:2rem;margin-bottom:2rem;transition:border-color .3s
+}
+.app-card:hover{border-color:var(--accent)}
+.app-card-header{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.app-icon{
+  width:56px;height:56px;border-radius:12px;
+  background:linear-gradient(135deg,var(--accent),#004422);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex-shrink:0
+}
+.app-info{flex:1}
+.app-name{font-size:18px;font-weight:700;margin-bottom:4px}
+.app-tag{
+  display:inline-block;font-size:10px;font-weight:600;
+  letter-spacing:1px;background:rgba(0,255,136,.1);color:var(--accent);
+  padding:3px 10px;border-radius:20px;margin-right:6px
+}
+.app-tag.free{background:rgba(0,255,136,.12)}
+.app-tag.popular{background:rgba(255,215,0,.12);color:var(--gold)}
+.app-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:1.2rem}
+.app-features{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.2rem}
+.app-features li{list-style:none;font-size:12px;color:var(--text);display:flex;align-items:center;gap:8px}
+.app-features li::before{content:'✦';color:var(--accent);font-size:9px}
+.app-actions{display:flex;gap:10px;flex-wrap:wrap}
+.app-screen{
+  background:var(--surface);border:1px solid var(--border);border-radius:8px;
+  padding:1rem;margin-bottom:1.2rem;overflow-x:auto;font-size:11px;color:var(--muted);line-height:1.6
+}
+.app-screen strong{color:var(--accent)}
+
+/* ---------- FEATURES ---------- */
+.features-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.feat{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:1.4rem;transition:border-color .2s
+}
+.feat:hover{border-color:var(--accent)}
+.feat-icon{font-size:24px;margin-bottom:8px}
+.feat-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.feat-desc{font-size:11px;color:var(--muted);line-height:1.6}
+
+/* ---------- YOUTUBE PREVIEW ---------- */
+.yt-preview{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;margin-bottom:2rem;position:relative
+}
+.yt-thumb{
+  aspect-ratio:16/9;background:#1a1a1a;display:flex;align-items:center;
+  justify-content:center;font-size:48px;cursor:pointer;transition:background .3s;
+  position:relative;border-bottom:1px solid var(--border)
+}
+.yt-thumb:hover{background:#222}
+.yt-thumb .play-btn{
+  width:64px;height:64px;border-radius:50%;background:rgba(255,0,0,.85);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;color:#fff;transition:transform .2s
+}
+.yt-thumb:hover .play-btn{transform:scale(1.05)}
+.yt-info{padding:1.2rem 1.4rem}
+.yt-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.yt-meta{font-size:11px;color:var(--muted)}
+
+/* ---------- ROADMAP ---------- */
+.roadmap{display:flex;flex-direction:column;gap:16px}
+.rm-item{
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:1.2rem 1.4rem;transition:border-color .2s
+}
+.rm-item:hover{border-color:var(--accent)}
+.rm-num{
+  width:40px;height:40px;border-radius:50%;background:var(--surface);
+  border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:var(--accent);flex-shrink:0
+}
+.rm-num.done{background:rgba(0,255,136,.1);border-color:var(--accent)}
+.rm-content{flex:1}
+.rm-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.rm-desc{font-size:11px;color:var(--muted);line-height:1.6}
+.rm-desc strong{color:var(--accent)}
+
+/* ---------- FOOTER ---------- */
+footer{
+  border-top:1px solid var(--border);padding:2.5rem 1.5rem;margin-top:2rem;
+  max-width:900px;margin-left:auto;margin-right:auto
+}
+.footer-grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
+.footer-col h4{font-size:12px;font-weight:700;margin-bottom:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:6px}
+.footer-col a{font-size:12px;color:var(--muted)}
+.footer-col a:hover{color:var(--text)}
+.footer-bottom{text-align:center;font-size:11px;color:var(--muted);margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:700px){
+  .hero h1{font-size:2rem}
+  .features-grid{grid-template-columns:1fr}
+  .app-features{grid-template-columns:1fr}
+  .nav-links{display:none;position:absolute;top:60px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);flex-direction:column;padding:1rem}
+  .nav-links.open{display:flex}
+  .hamburger{display:block}
+}
+</style>
+</head>
+<body>
+
+<!-- ====== NAV ====== -->
+<nav>
+  <div class="nav-logo"><span>✦</span> strammara</div>
+  <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+  <ul class="nav-links">
+    <li><a href="#apps">Apps</a></li>
+    <li><a href="#features">Fonctionnalités</a></li>
+    <li><a href="#video">Vidéo</a></li>
+    <li><a href="#roadmap">À venir</a></li>
+    <li><a href="https://github.com/strammfusion/strammara" target="_blank">GitHub</a></li>
+  </ul>
+</nav>
+
+<!-- ====== HERO ====== -->
+<div class="hero">
+  <div class="hero-badge">✦ 100% gratuit &amp; open source</div>
+  <h1>L'IA <em>pour tous</em>,<br>sans filtre, sans limites.</h1>
+  <p>
+    Strammara démocratise l'accès à l'intelligence artificielle.
+    Nos applications sont gratuites, open source et conçues pour ceux
+    qui veulent créer sans attendre la permission.
+  </p>
+  <div class="btn-group">
+    <a href="#apps" class="btn btn-primary">⬇ Voir les applis</a>
+    <a href="#video" class="btn btn-secondary">▶ Voir la démo</a>
+    <a href="#roadmap" class="btn btn-ghost">La suite →</a>
+  </div>
+</div>
+
+<!-- ====== APPS ====== -->
+<section id="apps">
+  <div class="section-label">✦ Nos applications</div>
+  <h2 class="section-title">Des outils gratuits, prêts à l'emploi.</h2>
+  <p class="section-sub">
+    Chaque application est pensée pour résoudre un vrai problème.
+    Pas de bloat, pas de tracking, pas de limite.
+  </p>
+
+  <!-- App 1 : Claude Code Auto-Setup -->
+  <div class="app-card" id="claude-setup">
+    <div class="app-card-header">
+      <div class="app-icon">⚡</div>
+      <div class="app-info">
+        <div class="app-name">Claude Code Auto-Setup</div>
+        <div>
+          <span class="app-tag free">Gratuit</span>
+          <span class="app-tag popular">Populaire</span>
+          <span class="app-tag">Windows</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-screen">
+<strong>></strong> Une IA de code <strong>gratuite</strong> installée en 3 clics,<br>
+<strong>></strong> Zéro ligne de commande — ton compte OpenRouter + un fichier .ps1,<br>
+<strong>></strong> Détection automatique des outils déjà installés (VS Code, Node, Git),<br>
+<strong>></strong> Catalogue OpenRouter en direct : choisis ton IA préférée,<br>
+<strong>></strong> Menu de démarrage multi-IA : une clé, plusieurs modèles.
+    </div>
+
+    <div class="app-desc">
+      Tu veux coder avec une IA sans te prendre la tête ? Ce fichier PowerShell installe
+      tout automatiquement — VS Code si nécessaire, Node.js, Git, Claude Code —
+      et configure ta clé OpenRouter en une fois. Tu n'écris <strong>aucune</strong> commande.
+    </div>
+
+    <div class="app-features">
+      <li>Installation en 3 clics</li>
+      <li>Détection intelligente des outils</li>
+      <li>Choix de l'IA dans un menu</li>
+      <li>Une seule clé OpenRouter</li>
+      <li>Compatible Windows 10/11</li>
+      <li>Mise à jour sans réinstaller</li>
+    </div>
+
+    <div class="app-actions">
+      <a href="#" class="btn btn-primary" onclick="alert('Lien de téléchargement à venir — bientôt sur GitHub !')">⬇ Télécharger</a>
+      <a href="https://github.com/strammfusion/strammara" target="_blank" class="btn btn-secondary">Voir le code</a>
+      <a href="#video" class="btn btn-ghost">▶ Voir la démo</a>
+    </div>
+  </div>
+
+  <!-- App 2 : à venir -->
+  <div style="text-align:center;padding:3rem 1rem;border:1px dashed var(--border);border-radius:12px">
+    <div style="font-size:36px;margin-bottom:12px">🚀</div>
+    <div style="font-size:16px;font-weight:600;margin-bottom:6px">Une nouvelle app arrive bientôt</div>
+    <div style="font-size:12px;color:var(--muted)">Tu as une idée ? <a href="https://github.com/strammfusion/strammara/issues" target="_blank">Propose-la sur GitHub</a></div>
+  </div>
+</section>
+
+<!-- ====== FEATURES ====== -->
+<section id="features">
+  <div class="section-label">✦ Pourquoi Strammara</div>
+  <h2 class="section-title">Pas un site de plus. Un atelier.</h2>
+  <p class="section-sub">
+    Chaque outil est construit avec une philosophie simple : <strong>libre, gratuit, durable</strong>.
+  </p>
+  <div class="features-grid">
+    <div class="feat">
+      <div class="feat-icon">🔓</div>
+      <div class="feat-title">100% gratuit</div>
+      <div class="feat-desc">Aucune carte bancaire. Aucun abonnement. Rien. Juste des outils qui marchent.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📖</div>
+      <div class="feat-title">Open source</div>
+      <div class="feat-desc">Tout le code est sur GitHub. Tu peux vérifier, modifier, forker. C'est la règle.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">⚡</div>
+      <div class="feat-title">Zéro tracking</div>
+      <div class="feat-desc">Pas de cookies, pas d'analytics, pas de fingerprint. On ne collecte rien.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🎯</div>
+      <div class="feat-title">Conçu pour les humains</div>
+      <div class="feat-desc">Pas de jargon. Pas de ligne de commande imposée. Une UI claire, du français, du simple.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🧩</div>
+      <div class="feat-title">Évolutif</div>
+      <div class="feat-desc">Chaque app peut être améliorée, combinée, adaptée. L'atelier est ouvert.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🌐</div>
+      <div class="feat-title">Hébergé simplement</div>
+      <div class="feat-desc">GitHub Pages + Cloudflare. Pas de serveur coûteux, pas de maintenance inutile.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== VIDEO ====== -->
+<section id="video">
+  <div class="section-label">▶ Vidéo de démonstration</div>
+  <h2 class="section-title">Voir l'installation en action</h2>
+  <p class="section-sub">
+    Une démo pas à pas pour installer Claude Code sans écrire une seule ligne de commande.
+  </p>
+
+  <div class="yt-preview">
+    <div class="yt-thumb" onclick="alert('Vidéo YouTube à venir — abonne-toi pour être notifié !')">
+      <div class="play-btn">▶</div>
+    </div>
+    <div class="yt-info">
+      <div class="yt-title">Installation Claude Code en 3 clics — Tutoriel complet</div>
+      <div class="yt-meta">Stramm Fusion · Bientôt disponible</div>
+    </div>
+  </div>
+
+  <div class="btn-group" style="justify-content:center">
+    <a href="https://youtube.com/@strammfusion" target="_blank" class="btn btn-secondary">🔴 S'abonner à la chaîne</a>
+  </div>
+</section>
+
+<!-- ====== ROADMAP ====== -->
+<section id="roadmap">
+  <div class="section-label">✦ À venir</div>
+  <h2 class="section-title">Ce qui arrive</h2>
+  <p class="section-sub">
+    On ne s'arrête jamais. Voici ce qu'on prépare pour les prochaines semaines.
+  </p>
+
+  <div class="roadmap">
+    <div class="rm-item">
+      <div class="rm-num done">1</div>
+      <div class="rm-content">
+        <div class="rm-title">Claude Code Auto-Setup V2</div>
+        <div class="rm-desc">Version stable avec hébergement GitHub, téléchargement public, <strong>déjà en ligne</strong>.</div>
+      </div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-num">2</div>
+      <div class="rm-content">
+        <div class="rm-title">Vidéo YouTube — Tutoriel d'installation</div>
+        <div class="rm-desc">Marche à suivre complète en français, de A à Z. À venir sur la chaîne <strong>Stramm Fusion</strong>.</div>
+      </div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-num">3</div>
+      <div class="rm-content">
+        <div class="rm-title">Site V2 en React/Vite</div>
+        <div class="rm-desc">Migration de la page statique vers une vraie app React avec routage, téléchargements dynamiques et catalogue de modèles.</div>
+      </div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-num">4</div>
+      <div class="rm-content">
+        <div class="rm-title">Deuxième application</div>
+        <div class="rm-desc">Une surprise — on la prépare en secret. <strong>Stay tuned ✨</strong></div>
+      </div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-num">5</div>
+      <div class="rm-content">
+        <div class="rm-title">Et après ?</div>
+        <div class="rm-desc">C'est toi qui décides. Chaque idée peut devenir une app Strammara. <strong>Le seul limite, c'est l'imagination.</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>✦ Strammara</h4>
+      <ul>
+        <li><a href="#apps">Applications</a></li>
+        <li><a href="#features">Fonctionnalités</a></li>
+        <li><a href="#roadmap">Feuille de route</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Communauté</h4>
+      <ul>
+        <li><a href="https://github.com/strammfusion/strammara" target="_blank">GitHub</a></li>
+        <li><a href="https://youtube.com/@strammfusion" target="_blank">YouTube</a></li>
+        <li><a href="mailto:tirard.michael@gmail.com">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Ressources</h4>
+      <ul>
+        <li><a href="https://openrouter.ai/keys" target="_blank">OpenRouter</a></li>
+        <li><a href="https://claude.ai/download" target="_blank">Claude Code</a></li>
+        <li><a href="https://pages.github.com" target="_blank">GitHub Pages</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    Strammara &mdash; Gratuit, libre, ouvert. Fait avec ❤️
+  </div>
+</footer>
+
+</body>
+</html>
