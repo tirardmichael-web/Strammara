@@ -56,11 +56,14 @@ function changeLang(lang) {
   cursor: pointer;
   opacity: 0.5;
   transition: all 0.15s;
-  font-size: 14px;
+  font-size: 10px;
+  font-weight: 700;
   line-height: 22px;
   text-align: center;
   background: transparent;
+  color: var(--text);
   padding: 0;
+  font-family: 'Courier New', monospace;
 }
 .lang-btn:hover { opacity: 0.8; }
 .lang-btn.active { opacity: 1; border-color: var(--accent); box-shadow: 0 0 6px rgba(0,255,136,0.3); }
@@ -284,10 +287,10 @@ details[open] .box-err summary::before{content:'▼ '}
 <div class="app">
 <!-- ====== SÉLECTEUR DE LANGUE ====== -->
 <div class="lang-bar">
-  <button class="lang-btn active" data-lang="en" onclick="changeLang('en')" title="English">🇬🇧</button>
-  <button class="lang-btn" data-lang="fr" onclick="changeLang('fr')" title="Français">🇫🇷</button>
-  <button class="lang-btn" data-lang="es" onclick="changeLang('es')" title="Español">🇪🇸</button>
-  <button class="lang-btn" data-lang="pt" onclick="changeLang('pt')" title="Português">🇵🇹</button>
+  <button class="lang-btn active" data-lang="en" onclick="changeLang('en')" title="English">EN</button>
+  <button class="lang-btn" data-lang="fr" onclick="changeLang('fr')" title="Français">FR</button>
+  <button class="lang-btn" data-lang="es" onclick="changeLang('es')" title="Español">ES</button>
+  <button class="lang-btn" data-lang="pt" onclick="changeLang('pt')" title="Português">PT</button>
 </div>
 <script>changeLang(currentLang);</script>
 
