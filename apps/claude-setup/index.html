@@ -139,7 +139,7 @@ function changeLang(lang) {
   --accent:#00ff88;--accent2:#0066ff;--text:#f0f0f0;--muted:#777;
   --warn:#ffaa00;--err:#ff4444;--info:#88bbff;--gold:#ffd700
 }
-html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-serif}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-serif;overflow-x:hidden;width:100%}
 .app{max-width:720px;margin:0 auto;padding:2rem 1.2rem 4rem}
 
 /* ---------- HEADER ---------- */
@@ -334,6 +334,16 @@ details[open] .box-err summary::before{content:'▼ '}
   .mgrid,.mgrid-mini{grid-template-columns:1fr}
   .tabs{flex-wrap:wrap}
   .tab{min-width:50%;border-bottom:1px solid var(--border)}
+  .app{padding:1rem .8rem 3rem}
+  .card{padding:1rem}
+  .or-row{gap:6px;padding:6px}
+  .or-row .or-col{width:50px;font-size:9px}
+  .or-head .or-h-col{width:50px}
+  .or-head{padding:0 6px 4px}
+  .or-controls select{min-width:100px;font-size:10px;padding:7px}
+  .or-sliders{padding:8px}
+  .nav-back{flex-direction:column;gap:8px;align-items:flex-start}
+  .lang-bar{width:100%;justify-content:flex-start}
 }
 
 /* ---------- FOOTER ---------- */
