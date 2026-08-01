@@ -124,46 +124,6 @@ section{padding:80px 1.5rem;max-width:900px;margin:0 auto}
 .feat-title{font-size:13px;font-weight:700;margin-bottom:4px}
 .feat-desc{font-size:11px;color:var(--muted);line-height:1.6}
 
-/* ---------- YOUTUBE PREVIEW ---------- */
-.yt-preview{
-  background:var(--card);border:1px solid var(--border);border-radius:12px;
-  overflow:hidden;margin-bottom:2rem;position:relative
-}
-.yt-thumb{
-  aspect-ratio:16/9;background:#1a1a1a;display:flex;align-items:center;
-  justify-content:center;font-size:48px;cursor:pointer;transition:background .3s;
-  position:relative;border-bottom:1px solid var(--border)
-}
-.yt-thumb:hover{background:#222}
-.yt-thumb .play-btn{
-  width:64px;height:64px;border-radius:50%;background:rgba(255,0,0,.85);
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;color:#fff;transition:transform .2s
-}
-.yt-thumb:hover .play-btn{transform:scale(1.05)}
-.yt-info{padding:1.2rem 1.4rem}
-.yt-title{font-size:14px;font-weight:700;margin-bottom:4px}
-.yt-meta{font-size:11px;color:var(--muted)}
-
-/* ---------- ROADMAP ---------- */
-.roadmap{display:flex;flex-direction:column;gap:16px}
-.rm-item{
-  display:flex;align-items:flex-start;gap:14px;
-  background:var(--card);border:1px solid var(--border);border-radius:10px;
-  padding:1.2rem 1.4rem;transition:border-color .2s
-}
-.rm-item:hover{border-color:var(--accent)}
-.rm-num{
-  width:40px;height:40px;border-radius:50%;background:var(--surface);
-  border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:700;color:var(--accent);flex-shrink:0
-}
-.rm-num.done{background:rgba(0,255,136,.1);border-color:var(--accent)}
-.rm-content{flex:1}
-.rm-title{font-size:13px;font-weight:700;margin-bottom:4px}
-.rm-desc{font-size:11px;color:var(--muted);line-height:1.6}
-.rm-desc strong{color:var(--accent)}
-
 /* ---------- FOOTER ---------- */
 footer{
   border-top:1px solid var(--border);padding:2.5rem 1.5rem;margin-top:2rem;
@@ -197,29 +157,26 @@ footer{
   <ul class="nav-links">
     <li><a href="#apps">Apps</a></li>
     <li><a href="#features">Fonctionnalités</a></li>
-    <li><a href="#video">Vidéo</a></li>
-    <li><a href="#roadmap">À venir</a></li>
-    <li><a href="https://github.com/tirardmichael-web/Strammara" target="_blank">GitHub</a></li>
+    <li><a href="https://youtube.com/@strammara" target="_blank">YouTube</a></li>
   </ul>
 </nav>
 
 <!-- ====== HERO ====== -->
 <div class="hero">
-  <div class="hero-badge">✦ 100% gratuit &amp; open source</div>
+  <div class="hero-badge">✦ 100% gratuit</div>
   <h1>L'IA <em>pour tous</em>,<br>sans filtre, sans limites.</h1>
   <p>
     Strammara démocratise l'accès à l'intelligence artificielle.
-    Nos applications sont gratuites, open source et conçues pour ceux
+    Nos applications sont gratuites et conçues pour ceux
     qui veulent créer sans attendre la permission.
   </p>
   <div class="btn-group">
     <a href="#apps" class="btn btn-primary">⬇ Voir les applis</a>
-    <a href="#video" class="btn btn-secondary">▶ Voir la démo</a>
-    <a href="#roadmap" class="btn btn-ghost">La suite →</a>
+    <a href="https://youtube.com/@strammara" target="_blank" class="btn btn-secondary">▶ Chaîne YouTube</a>
   </div>
 </div>
 
-<!-- ====== APPS ====== -->
+<!-- ====== SCREENSHOT ====== -->
 <section id="apps">
   <div class="section-label">✦ Nos applications</div>
   <h2 class="section-title">Des outils gratuits, prêts à l'emploi.</h2>
@@ -251,9 +208,10 @@ footer{
     </div>
 
     <div class="app-desc">
-      Tu veux coder avec une IA sans te prendre la tête ? Ce fichier PowerShell installe
-      tout automatiquement — VS Code si nécessaire, Node.js, Git, Claude Code —
-      et configure ta clé OpenRouter en une fois. Tu n'écris <strong>aucune</strong> commande.
+      Tu veux coder avec une IA sans galérer avec la ligne de commande ?
+      Renseigne ta clé OpenRouter, choisis ton modèle dans le catalogue,
+      et l'app génère un fichier d'installation sur mesure pour toi.
+      Tu n'as plus qu'à le lancer — tout le reste est automatique.
     </div>
 
     <div class="app-features">
@@ -267,8 +225,7 @@ footer{
 
     <div class="app-actions">
       <a href="/apps/claude-setup" class="btn btn-primary">⚡ Ouvrir l'application</a>
-      <a href="https://github.com/tirardmichael-web/Strammara" target="_blank" class="btn btn-secondary">Voir le code</a>
-      <a href="#video" class="btn btn-ghost">▶ Voir la démo</a>
+      <a href="https://youtube.com/@strammara" target="_blank" class="btn btn-ghost">▶ Voir la démo</a>
     </div>
   </div>
 
@@ -276,7 +233,21 @@ footer{
   <div style="text-align:center;padding:3rem 1rem;border:1px dashed var(--border);border-radius:12px">
     <div style="font-size:36px;margin-bottom:12px">🚀</div>
     <div style="font-size:16px;font-weight:600;margin-bottom:6px">Une nouvelle app arrive bientôt</div>
-    <div style="font-size:12px;color:var(--muted)">Tu as une idée ? <a href="https://github.com/tirardmichael-web/Strammara/issues" target="_blank">Propose-la sur GitHub</a></div>
+    <div style="font-size:12px;color:var(--muted)">Tu as une idée ? <a href="mailto:tirard.michael@gmail.com">Écris-nous</a> — on l'étudie ensemble</div>
+  </div>
+</section>
+
+<!-- ====== VISUEL ====== -->
+<section id="visuel">
+  <div class="section-label">✦ Aperçu</div>
+  <h2 class="section-title">Comment ça marche</h2>
+  <p class="section-sub">
+    Une application en trois étapes : ta clé, ton IA, ton installation.
+  </p>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:2rem;text-align:center">
+    <div style="font-size:48px;margin-bottom:12px">🎬</div>
+    <div style="font-size:16px;font-weight:600;margin-bottom:6px">Démonstration vidéo à venir</div>
+    <div style="font-size:12px;color:var(--muted)">On prépare une capture d'écran commentée pour te montrer l'application en action.<br>Abonne-toi à la chaîne <strong>Strammara</strong> pour ne pas la manquer.</div>
   </div>
 </section>
 
@@ -294,99 +265,14 @@ footer{
       <div class="feat-desc">Aucune carte bancaire. Aucun abonnement. Rien. Juste des outils qui marchent.</div>
     </div>
     <div class="feat">
-      <div class="feat-icon">📖</div>
-      <div class="feat-title">Open source</div>
-      <div class="feat-desc">Tout le code est sur GitHub. Tu peux vérifier, modifier, forker. C'est la règle.</div>
+      <div class="feat-icon">🎯</div>
+      <div class="feat-title">Accessible à tous</div>
+      <div class="feat-desc">Multilingue, aucune connaissance technique requise. Une UI claire, du simple, du concret.</div>
     </div>
     <div class="feat">
       <div class="feat-icon">⚡</div>
       <div class="feat-title">Zéro tracking</div>
       <div class="feat-desc">Pas de cookies, pas d'analytics, pas de fingerprint. On ne collecte rien.</div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">🎯</div>
-      <div class="feat-title">Conçu pour les humains</div>
-      <div class="feat-desc">Pas de jargon. Pas de ligne de commande imposée. Une UI claire, du français, du simple.</div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">🧩</div>
-      <div class="feat-title">Évolutif</div>
-      <div class="feat-desc">Chaque app peut être améliorée, combinée, adaptée. L'atelier est ouvert.</div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">🌐</div>
-      <div class="feat-title">Hébergé simplement</div>
-      <div class="feat-desc">GitHub Pages + Cloudflare. Pas de serveur coûteux, pas de maintenance inutile.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ====== VIDEO ====== -->
-<section id="video">
-  <div class="section-label">▶ Vidéo de démonstration</div>
-  <h2 class="section-title">Voir l'installation en action</h2>
-  <p class="section-sub">
-    Une démo pas à pas pour installer Claude Code sans écrire une seule ligne de commande.
-  </p>
-
-  <div class="yt-preview">
-    <div class="yt-thumb" onclick="alert('Vidéo YouTube à venir — abonne-toi pour être notifié !')">
-      <div class="play-btn">▶</div>
-    </div>
-    <div class="yt-info">
-      <div class="yt-title">Installation Claude Code en 3 clics — Tutoriel complet</div>
-      <div class="yt-meta">Stramm Fusion · Bientôt disponible</div>
-    </div>
-  </div>
-
-  <div class="btn-group" style="justify-content:center">
-    <a href="https://youtube.com/@strammfusion" target="_blank" class="btn btn-secondary">🔴 S'abonner à la chaîne</a>
-  </div>
-</section>
-
-<!-- ====== ROADMAP ====== -->
-<section id="roadmap">
-  <div class="section-label">✦ À venir</div>
-  <h2 class="section-title">Ce qui arrive</h2>
-  <p class="section-sub">
-    On ne s'arrête jamais. Voici ce qu'on prépare pour les prochaines semaines.
-  </p>
-
-  <div class="roadmap">
-    <div class="rm-item">
-      <div class="rm-num done">1</div>
-      <div class="rm-content">
-        <div class="rm-title">Claude Code Auto-Setup V2</div>
-        <div class="rm-desc">Version stable avec hébergement GitHub, téléchargement public, <strong>déjà en ligne</strong>.</div>
-      </div>
-    </div>
-    <div class="rm-item">
-      <div class="rm-num">2</div>
-      <div class="rm-content">
-        <div class="rm-title">Vidéo YouTube — Tutoriel d'installation</div>
-        <div class="rm-desc">Marche à suivre complète en français, de A à Z. À venir sur la chaîne <strong>Stramm Fusion</strong>.</div>
-      </div>
-    </div>
-    <div class="rm-item">
-      <div class="rm-num">3</div>
-      <div class="rm-content">
-        <div class="rm-title">Site V2 en React/Vite</div>
-        <div class="rm-desc">Migration de la page statique vers une vraie app React avec routage, téléchargements dynamiques et catalogue de modèles.</div>
-      </div>
-    </div>
-    <div class="rm-item">
-      <div class="rm-num">4</div>
-      <div class="rm-content">
-        <div class="rm-title">Deuxième application</div>
-        <div class="rm-desc">Une surprise — on la prépare en secret. <strong>Stay tuned ✨</strong></div>
-      </div>
-    </div>
-    <div class="rm-item">
-      <div class="rm-num">5</div>
-      <div class="rm-content">
-        <div class="rm-title">Et après ?</div>
-        <div class="rm-desc">C'est toi qui décides. Chaque idée peut devenir une app Strammara. <strong>Le seul limite, c'est l'imagination.</strong></div>
-      </div>
     </div>
   </div>
 </section>
@@ -399,23 +285,19 @@ footer{
       <ul>
         <li><a href="#apps">Applications</a></li>
         <li><a href="#features">Fonctionnalités</a></li>
-        <li><a href="#roadmap">Feuille de route</a></li>
+        <li><a href="https://youtube.com/@strammara" target="_blank">YouTube</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Communauté</h4>
+      <h4>Contact</h4>
       <ul>
-        <li><a href="https://github.com/tirardmichael-web/Strammara" target="_blank">GitHub</a></li>
-        <li><a href="https://youtube.com/@strammfusion" target="_blank">YouTube</a></li>
-        <li><a href="mailto:tirard.michael@gmail.com">Contact</a></li>
+        <li><a href="mailto:tirard.michael@gmail.com">Écris-nous</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Ressources</h4>
       <ul>
         <li><a href="https://openrouter.ai/keys" target="_blank">OpenRouter</a></li>
-        <li><a href="https://claude.ai/download" target="_blank">Claude Code</a></li>
-        <li><a href="https://pages.github.com" target="_blank">GitHub Pages</a></li>
       </ul>
     </div>
   </div>
