@@ -232,11 +232,22 @@ const TRADUCTIONS = {
     modalWarn: 'A minimum of <strong style="color:var(--warn)">€5 of credit</strong> on your OpenRouter account is required to use models — <strong>including free ones</strong> — with Claude Code.',
     modalCancel: "Cancel",
     modalConfirm: "✓ Understood — Open OpenRouter",
-    // Footer
-    footer: "V2 · Local key · Zero tracking · 100% free"
-  },
+    modalConfirm: "✓ Understood — Open OpenRouter",
+        btnShow: "Show",
+        btnHide: "Hide",
+        btnApplyKey: "Apply this key",
+        btnApplyModel: "Apply this choice",
+        filterAll: "Free + Paid",
+        filterFree: "Free only",
+        filterPaid: "Paid only",
+        colName: "Model name",
+        colContext: "Context",
+        colInput: "Input",
+        colOutput: "Output",
+        footer: "V2 · Local key · Zero tracking · 100% free"
+      },
 
-  fr: {
+      fr: {
     lang: "Français",
     // Same as original — kept as reference
     badge: "100% GRATUIT · V2",
@@ -457,6 +468,17 @@ const TRADUCTIONS = {
     modalWarn: 'Un minimum de <strong style="color:var(--warn)">5€ de crédit</strong> sur ton compte OpenRouter est nécessaire pour pouvoir utiliser les modèles — <strong>y compris les gratuits</strong> — avec Claude Code.',
     modalCancel: "Annuler",
     modalConfirm: "✓ Compris — Ouvrir OpenRouter",
+    btnShow: "Afficher",
+    btnHide: "Masquer",
+    btnApplyKey: "Appliquer cette clé",
+    btnApplyModel: "Appliquer ce choix",
+    filterAll: "Gratuit + Payant",
+    filterFree: "Gratuit seulement",
+    filterPaid: "Payant seulement",
+    colName: "Nom du modèle",
+    colContext: "Contexte",
+    colInput: "Entrée",
+    colOutput: "Sortie",
     footer: "V2 • Clé locale • Zéro tracking • 100% gratuit"
   },
 
@@ -680,6 +702,17 @@ const TRADUCTIONS = {
     modalWarn: 'Se requiere un mínimo de <strong style="color:var(--warn)">5€ de crédito</strong> en tu cuenta de OpenRouter para usar los modelos — <strong>incluidos los gratuitos</strong> — con Claude Code.',
     modalCancel: "Cancelar",
     modalConfirm: "✓ Entendido — Abrir OpenRouter",
+    btnShow: "Mostrar",
+    btnHide: "Ocultar",
+    btnApplyKey: "Aplicar esta clave",
+    btnApplyModel: "Aplicar esta elección",
+    filterAll: "Gratuito + Pago",
+    filterFree: "Solo gratuito",
+    filterPaid: "Solo pago",
+    colName: "Nombre del modelo",
+    colContext: "Contexto",
+    colInput: "Entrada",
+    colOutput: "Salida",
     footer: "V2 • Clave local • Sin tracking • 100% gratis"
   },
 
@@ -903,6 +936,17 @@ const TRADUCTIONS = {
     modalWarn: 'É necessário um mínimo de <strong style="color:var(--warn)">5€ de crédito</strong> na sua conta OpenRouter para usar os modelos — <strong>incluindo os gratuitos</strong> — com Claude Code.',
     modalCancel: "Cancelar",
     modalConfirm: "✓ Entendido — Abrir OpenRouter",
+    btnShow: "Exibir",
+    btnHide: "Ocultar",
+    btnApplyKey: "Aplicar esta chave",
+    btnApplyModel: "Aplicar esta escolha",
+    filterAll: "Gratuito + Pago",
+    filterFree: "Apenas gratuito",
+    filterPaid: "Apenas pago",
+    colName: "Nome do modelo",
+    colContext: "Contexto",
+    colInput: "Entrada",
+    colOutput: "Saída",
     footer: "V2 • Chave local • Sem rastreio • 100% grátis"
   }
 };
