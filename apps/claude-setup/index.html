@@ -68,6 +68,64 @@ function changeLang(lang) {
 .lang-btn:hover { opacity: 0.8; }
 .lang-btn.active { opacity: 1; border-color: var(--accent); box-shadow: 0 0 6px rgba(0,255,136,0.3); }
 .lang-btn img { width: 24px; height: 16px; vertical-align: middle; border-radius: 2px; }
+
+/* ---------- NAV RETOUR ---------- */
+.nav-back {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 8px 0;
+  margin-bottom: 4px;
+}
+.nav-back a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -.5px;
+  transition: color .15s;
+}
+.nav-back a:hover { color: var(--accent); }
+.nav-back a span { color: var(--accent); }
+
+/* ---------- BLOC MOBILE ---------- */
+.mobile-block {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+.mobile-block.show { display: flex; }
+.mobile-block-inner {
+  max-width: 400px;
+}
+.mobile-block-inner h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.mobile-block-inner p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+.mobile-block-inner .btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #000;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+}
 </style>
 
 <!-- ============================================================
@@ -284,13 +342,33 @@ details[open] .box-err summary::before{content:'▼ '}
 </style>
 </head>
 <body>
+<!-- ====== BLOCAGE MOBILE ====== -->
+<div class="mobile-block" id="mobile-block">
+  <div class="mobile-block-inner">
+    <h2 id="mb-title">💻 Windows uniquement</h2>
+    <p id="mb-text">Cette application crée un fichier d'installation pour Windows (.ps1). Elle ne fonctionne pas sur mobile. Ouvre cette page sur un PC Windows pour continuer.</p>
+    <p id="mb-text-es" style="display:none">Esta aplicación crea un archivo de instalación para Windows (.ps1). No funciona en móvil. Abre esta página en un PC Windows.</p>
+    <p id="mb-text-pt" style="display:none">Esta aplicação cria um ficheiro de instalação para Windows (.ps1). Não funciona em telemóvel. Abra esta página num PC Windows.</p>
+    <p id="mb-text-en" style="display:none">This app creates a Windows installation file (.ps1). It doesn't work on mobile. Open this page on a Windows PC.</p>
+    <a href="/" class="btn" id="mb-btn">← strammara.fr</a>
+  </div>
+</div>
+<script>
+if(/Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(navigator.userAgent)){
+  document.getElementById('mobile-block').classList.add('show');
+}
+</script>
+
 <div class="app">
-<!-- ====== SÉLECTEUR DE LANGUE ====== -->
-<div class="lang-bar">
-  <button class="lang-btn active" data-lang="en" onclick="changeLang('en')" title="English">EN</button>
-  <button class="lang-btn" data-lang="fr" onclick="changeLang('fr')" title="Français">FR</button>
-  <button class="lang-btn" data-lang="es" onclick="changeLang('es')" title="Español">ES</button>
-  <button class="lang-btn" data-lang="pt" onclick="changeLang('pt')" title="Português">PT</button>
+<!-- ====== NAV RETOUR ====== -->
+<div class="nav-back">
+  <a href="/"><span>✦</span> strammara</a>
+  <div class="lang-bar" style="margin:0">
+    <button class="lang-btn active" data-lang="en" onclick="changeLang('en')" title="English">EN</button>
+    <button class="lang-btn" data-lang="fr" onclick="changeLang('fr')" title="Français">FR</button>
+    <button class="lang-btn" data-lang="es" onclick="changeLang('es')" title="Español">ES</button>
+    <button class="lang-btn" data-lang="pt" onclick="changeLang('pt')" title="Português">PT</button>
+  </div>
 </div>
 <script>changeLang(currentLang);</script>
 
