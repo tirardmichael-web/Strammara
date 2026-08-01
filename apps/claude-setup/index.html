@@ -311,43 +311,43 @@ details[open] .box-err summary::before{content:'▼ '}
 <div class="screen active" id="sc-1">
 
   <div class="card">
-    <div class="card-title">🔑 Obtenir ta clé d'accès gratuite</div>
-    <div class="card-sub">OpenRouter te donne accès à des dizaines d'IA avec une seule clé. Gratuit, sans carte bancaire — <strong style="color:var(--warn)">mais ça ne fonctionne pas avec Claude Code tant qu'il n'y a pas un minimum de crédit sur ton compte</strong> (voir ci-dessous).</div>
+    <div class="card-title" data-i18n="keyTitle">🔑 Obtenir ta clé d'accès gratuite</div>
+    <div class="card-sub" data-i18n="keySub">OpenRouter te donne accès à des dizaines d'IA avec une seule clé. Gratuit, sans carte bancaire — <strong style="color:var(--warn)">mais ça ne fonctionne pas avec Claude Code tant qu'il n'y a pas un minimum de crédit sur ton compte</strong> (voir ci-dessous).</div>
 
     <div class="box-warn box-warn-pulse">
-      <div class="box-warn-title">⚠ IMPORTANT — Crédit minimum obligatoire</div>
-      <p style="font-size:12px;line-height:1.7;color:#ffddaa">
+      <div class="box-warn-title" data-i18n="warnTitle">⚠ IMPORTANT — Crédit minimum obligatoire</div>
+      <p style="font-size:12px;line-height:1.7;color:#ffddaa" data-i18n="warnText">
         Sans <strong style="color:var(--warn)">crédit sur ton compte OpenRouter</strong>, Claude Code ne pourra utiliser <strong>aucune IA</strong> — même les modèles gratuits (<code style="background:var(--bg);color:var(--warn);font-family:'Courier New',monospace;padding:1px 5px">:free</code>) en ont besoin pour fonctionner correctement. Prévois au moins <strong style="color:var(--accent)">5€ de crédit</strong> sur <a href="https://openrouter.ai/credits" target="_blank" rel="noopener" style="color:var(--accent)">openrouter.ai/credits</a> avant de continuer.
       </p>
     </div>
 
     <div class="steps">
-      <div class="si"><div class="sn">1</div><div class="st">Clique sur le bouton bleu ci-dessous.<br><em>→ Le site OpenRouter s'ouvre dans un nouvel onglet</em></div></div>
-      <div class="si"><div class="sn">2</div><div class="st">Crée un compte : clique <strong>Sign in</strong> → <strong>Continue with Google</strong><br><em>→ C'est plus rapide avec Google</em></div></div>
-      <div class="si"><div class="sn">3</div><div class="st">Dans le menu de gauche, clique sur <strong>Keys</strong> → <strong>Create API key</strong><br><em>→ Donne-lui un nom (ex: "mon-ia") et clique Create</em></div></div>
-      <div class="si"><div class="sn">4</div><div class="st"><strong>Copie la clé</strong> qui apparaît (commence par <code style="background:var(--bg);color:var(--warn);font-family:'Courier New',monospace;padding:1px 5px">sk-or-v1-…</code>)<br><em>→ Elle n'est affichée qu'une seule fois — ne ferme pas la page avant !</em></div></div>
+      <div class="si"><div class="sn">1</div><div class="st"><span data-i18n="step1_1">Clique sur le bouton bleu ci-dessous.</span><br><em data-i18n="step1_1hint">→ Le site OpenRouter s'ouvre dans un nouvel onglet</em></div></div>
+      <div class="si"><div class="sn">2</div><div class="st"><span data-i18n="step1_2">Crée un compte : clique <strong>Sign in</strong> → <strong>Continue with Google</strong></span><br><em data-i18n="step1_2hint">→ C'est plus rapide avec Google</em></div></div>
+      <div class="si"><div class="sn">3</div><div class="st"><span data-i18n="step1_3">Dans le menu de gauche, clique sur <strong>Keys</strong> → <strong>Create API key</strong></span><br><em data-i18n="step1_3hint">→ Donne-lui un nom (ex: "mon-ia") et clique Create</em></div></div>
+      <div class="si"><div class="sn">4</div><div class="st"><span data-i18n="step1_4"><strong>Copie la clé</strong> qui apparaît (commence par <code style="background:var(--bg);color:var(--warn);font-family:'Courier New',monospace;padding:1px 5px">sk-or-v1-…</code>)</span><br><em data-i18n="step1_4hint">→ Elle n'est affichée qu'une seule fois — ne ferme pas la page avant !</em></div></div>
     </div>
-    <button class="btn btn-blue btn-full" onclick="openOrModal()">👉 Ouvrir OpenRouter — créer ma clé gratuite</button>
+    <button class="btn btn-blue btn-full" onclick="openOrModal()" data-i18n="openOrBtn">👉 Ouvrir OpenRouter — créer ma clé gratuite</button>
   </div>
 
   <div class="card">
-    <div class="card-title">Colle ta clé ici</div>
-    <div class="card-sub">Ta clé reste uniquement sur ton ordinateur. Elle est sauvegardée automatiquement.</div>
+    <div class="card-title" data-i18n="pasteTitle">Colle ta clé ici</div>
+    <div class="card-sub" data-i18n="pasteSub">Ta clé reste uniquement sur ton ordinateur. Elle est sauvegardée automatiquement.</div>
     <div class="row">
       <input type="password" id="api-key" placeholder="sk-or-v1-..."
         oninput="onKeyInput()" onpaste="setTimeout(onKeyInput,50)"
-        autocomplete="off"/>
+        autocomplete="off" data-i18n-placeholder="keyPlaceholder"/>
       <button class="btn btn-ghost" onclick="toggleVis('api-key',this)">Afficher</button>
     </div>
     <div class="kstatus">
       <div class="dot" id="k-dot"></div>
-      <span class="stxt" id="k-msg" style="color:var(--muted)">En attente de ta clé...</span>
+      <span class="stxt" id="k-msg" style="color:var(--muted)" data-i18n="keyWaiting">En attente de ta clé...</span>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
-      <button class="btn btn-green" id="btn-test-key" onclick="testKey()" disabled style="flex:1">🔍 Tester ma clé</button>
-      <button class="btn btn-ghost" id="btn-skip-test" onclick="skipTest()" style="display:none;font-size:10px">Passer le test</button>
+      <button class="btn btn-green" id="btn-test-key" onclick="testKey()" disabled style="flex:1" data-i18n="testKey">🔍 Tester ma clé</button>
+      <button class="btn btn-ghost" id="btn-skip-test" onclick="skipTest()" style="display:none;font-size:10px" data-i18n="skipTest">Passer le test</button>
     </div>
-    <button class="btn btn-green btn-full" id="btn-s1" onclick="next(1)" disabled>✓ Ma clé est prête — Étape suivante →</button>
+    <button class="btn btn-green btn-full" id="btn-s1" onclick="next(1)" disabled data-i18n="nextStep1">✓ Ma clé est prête — Étape suivante →</button>
   </div>
 
 </div>
@@ -356,50 +356,50 @@ details[open] .box-err summary::before{content:'▼ '}
 <div class="screen" id="sc-2">
 
   <div class="card">
-    <div class="card-title">🤖 Choisir ton IA</div>
-    <div class="card-sub">Si une IA ne répond pas, essayes-en une autre — c'est facile à changer.</div>
+    <div class="card-title" data-i18n="modelTitle">🤖 Choisir ton IA</div>
+    <div class="card-sub" data-i18n="modelSub">Si une IA ne répond pas, essayes-en une autre — c'est facile à changer.</div>
 
-    <div class="box-info">
+    <div class="box-info" data-i18n="modelInfo">
       <strong>ℹ Comment ça marche</strong><br>
       Les IA gratuites ont des limites (~20 requêtes/minute). Si une est surchargée, essaie-en une autre. Notre recommandée est <strong style="color:var(--gold)">DeepSeek V4 Flash</strong> — excellent rapport qualité/prix, parfait pour coder.
     </div>
 
-    <p style="font-size:11px;color:var(--muted);margin:-6px 0 1.2rem">ℹ Un rappel sur les limites quotidiennes des IA gratuites et le crédit minimum ? <strong style="color:var(--accent);cursor:pointer" onclick="openOrModal()">Revoir l'info →</strong></p>
+    <p style="font-size:11px;color:var(--muted);margin:-6px 0 1.2rem" data-i18n="modelRemind">ℹ Un rappel sur les limites quotidiennes des IA gratuites et le crédit minimum ? <strong style="color:var(--accent);cursor:pointer" onclick="openOrModal()">Revoir l'info →</strong></p>
 
     <div class="mgrid">
       <!-- DeepSeek V4 Flash — Recommandé -->
       <div class="mc reco sel" id="m-deepseek" onclick="selModel('deepseek/deepseek-v4-flash','m-deepseek')">
-        <div class="mc-tag" style="color:var(--gold)">★ RECOMMANDÉ</div>
-        <div class="mc-name">DeepSeek V4 Flash (Payant)</div>
-        <div class="mc-ctx">Contexte : 1M tokens</div>
-        <div class="mc-desc">Raisonnement puissant, excellent en code, 1M de contexte. Le meilleur rapport qualité/prix pour Claude Code.</div>
+        <div class="mc-tag" style="color:var(--gold)" data-i18n="recoTag">★ RECOMMANDÉ</div>
+        <div class="mc-name" data-i18n="deepseekName">DeepSeek V4 Flash (Payant)</div>
+        <div class="mc-ctx" data-i18n="deepseekCtx">Contexte : 1M tokens</div>
+        <div class="mc-desc" data-i18n="deepseekDesc">Raisonnement puissant, excellent en code, 1M de contexte. Le meilleur rapport qualité/prix pour Claude Code.</div>
       </div>
       <!-- Nemotron Ultra — Gratuit -->
       <div class="mc" id="m-ultra" onclick="selModel('nvidia/nemotron-3-ultra-550b-a55b:free','m-ultra')">
-        <div class="mc-tag" style="color:var(--accent)">GRATUIT</div>
-        <div class="mc-name">Nemotron 3 Ultra</div>
-        <div class="mc-ctx">Contexte : 1M tokens</div>
-        <div class="mc-desc">Modèle NVIDIA très grand (550B params), excellent en raisonnement et en code. Gratuit sur OpenRouter.</div>
+        <div class="mc-tag" style="color:var(--accent)" data-i18n="ultraTag">GRATUIT</div>
+        <div class="mc-name" data-i18n="ultraName">Nemotron 3 Ultra</div>
+        <div class="mc-ctx" data-i18n="ultraCtx">Contexte : 1M tokens</div>
+        <div class="mc-desc" data-i18n="ultraDesc">Modèle NVIDIA très grand (550B params), excellent en raisonnement et en code. Gratuit sur OpenRouter.</div>
       </div>
       <!-- Nemotron Super — Gratuit -->
       <div class="mc" id="m-nem" onclick="selModel('nvidia/nemotron-3-super-120b-a12b:free','m-nem')">
-        <div class="mc-tag" style="color:var(--accent)">GRATUIT</div>
-        <div class="mc-name">Nemotron 3 Super</div>
-        <div class="mc-ctx">Contexte : 1M tokens</div>
-        <div class="mc-desc">Modèle NVIDIA hybride très efficace (120B params), rapide et gratuit. Excellent pour les tâches longues.</div>
+        <div class="mc-tag" style="color:var(--accent)" data-i18n="ultraTag">GRATUIT</div>
+        <div class="mc-name" data-i18n="nemName">Nemotron 3 Super</div>
+        <div class="mc-ctx" data-i18n="nemCtx">Contexte : 1M tokens</div>
+        <div class="mc-desc" data-i18n="nemDesc">Modèle NVIDIA hybride très efficace (120B params), rapide et gratuit. Excellent pour les tâches longues.</div>
       </div>
       <!-- Modèle personnalisé -->
       <div class="mc" id="m-cust" onclick="focusCustom()">
-        <div class="mc-tag" style="color:var(--warn)">AVANCÉ</div>
-        <div class="mc-name">Autre modèle</div>
+        <div class="mc-tag" style="color:var(--warn)" data-i18n="customTag">AVANCÉ</div>
+        <div class="mc-name" data-i18n="customModelName">Autre modèle</div>
         <div class="mc-ctx"></div>
-        <div class="mc-desc">Entrer l'identifiant exact d'un modèle OpenRouter toi-même.</div>
+        <div class="mc-desc" data-i18n="customModelDesc">Entrer l'identifiant exact d'un modèle OpenRouter toi-même.</div>
       </div>
     </div>
 
     <div class="row" style="margin-bottom:0">
-      <input type="text" id="custom-m" placeholder="ex: anthropic/claude-sonnet-4-6 (payant)" oninput="customM()"/>
-      <button class="btn btn-ghost" onclick="window.open('https://openrouter.ai/models?order=top-weekly&supported_parameters=tools','_blank')">Voir la liste</button>
+      <input type="text" id="custom-m" placeholder="ex: anthropic/claude-sonnet-4-6 (payant)" oninput="customM()" data-i18n-placeholder="customPlaceholder"/>
+      <button class="btn btn-ghost" onclick="window.open('https://openrouter.ai/models?order=top-weekly&supported_parameters=tools','_blank')" data-i18n="viewList">Voir la liste</button>
     </div>
 
     <div class="model-detail" id="model-tip">
@@ -407,28 +407,28 @@ details[open] .box-err summary::before{content:'▼ '}
     </div>
   </div>
 
-  <div class="box-tip">
+  <div class="box-tip" data-i18n="tip">
     💡 <strong>Astuce :</strong> Tu peux changer d'IA à tout moment dans Claude Code avec la commande <code style="background:var(--bg);color:var(--warn);font-family:'Courier New',monospace;padding:1px 5px">/model</code>. Voir l'onglet <strong style="color:var(--accent);cursor:pointer" onclick="goTab(5)">? Aide</strong> pour le guide complet en français.
   </div>
 
   <div class="card">
-    <div class="card-title">🧩 Installer d'autres IA (optionnel)</div>
-    <div class="card-sub">Catalogue complet d'OpenRouter (des centaines de modèles), avec la <strong style="color:var(--accent)">même clé</strong>. Cherche, filtre, trie, et coche autant d'IA que tu veux — à chaque lancement, un petit menu te proposera de choisir laquelle utiliser.</div>
+    <div class="card-title" data-i18n="extraTitle">🧩 Installer d'autres IA (optionnel)</div>
+    <div class="card-sub" data-i18n="extraSub">Catalogue complet d'OpenRouter (des centaines de modèles), avec la <strong style="color:var(--accent)">même clé</strong>. Cherche, filtre, trie, et coche autant d'IA que tu veux — à chaque lancement, un petit menu te proposera de choisir laquelle utiliser.</div>
 
     <div class="or-defaults">
       <div class="or-default-box">
-        <span class="odl">🆓 IA gratuite par défaut</span>
+        <span class="odl" data-i18n="defFree">🆓 IA gratuite par défaut</span>
         <span class="odv" id="or-default-free-name">—</span>
       </div>
       <div class="or-default-box">
-        <span class="odl">💰 IA payante par défaut</span>
+        <span class="odl" data-i18n="defPaid">💰 IA payante par défaut</span>
         <span class="odv" id="or-default-paid-name">—</span>
       </div>
     </div>
-    <p style="font-size:10px;color:var(--muted);line-height:1.6;margin:-4px 0 10px">On te propose déjà la plus puissante gratuite (le plus de contexte) et une payante solide. Clique sur 🆓 ou 💰 à côté d'un modèle dans la liste pour changer.</p>
+    <p style="font-size:10px;color:var(--muted);line-height:1.6;margin:-4px 0 10px" data-i18n="defHint">On te propose déjà la plus puissante gratuite (le plus de contexte) et une payante solide. Clique sur 🆓 ou 💰 à côté d'un modèle dans la liste pour changer.</p>
 
     <div class="row" style="margin-bottom:8px">
-      <input type="text" id="or-search" placeholder="Rechercher (ex: gemini, mistral, claude, vision...)" oninput="renderOrCatalog('or')"/>
+      <input type="text" id="or-search" placeholder="Rechercher (ex: gemini, mistral, claude, vision...)" oninput="renderOrCatalog('or')" data-i18n-placeholder="searchPlaceholder"/>
     </div>
 
     <div class="or-controls">
@@ -438,43 +438,43 @@ details[open] .box-err summary::before{content:'▼ '}
         <option value="paid">Payant uniquement</option>
       </select>
       <select id="or-cat" onchange="renderOrCatalog('or')">
-        <option value="all">Toutes catégories</option>
-        <option value="code">💻 Code</option>
-        <option value="reasoning">🧠 Raisonnement</option>
-        <option value="writing">✍️ Rédaction / SEO</option>
-        <option value="vision">👁 Vision / Multimodal</option>
-        <option value="fast">⚡ Rapide / Léger</option>
-        <option value="general">💬 Généraliste</option>
+        <option value="all" data-i18n="catAll">Toutes catégories</option>
+        <option value="code" data-i18n="catCode">💻 Code</option>
+        <option value="reasoning" data-i18n="catReasoning">🧠 Raisonnement</option>
+        <option value="writing" data-i18n="catWriting">✍️ Rédaction / SEO</option>
+        <option value="vision" data-i18n="catVision">👁 Vision / Multimodal</option>
+        <option value="fast" data-i18n="catFast">⚡ Rapide / Léger</option>
+        <option value="general" data-i18n="catGeneral">💬 Généraliste</option>
       </select>
       <select id="or-sort" onchange="renderOrCatalog('or')">
-        <option value="name">Trier : Nom (A-Z)</option>
-        <option value="ctx-desc">Trier : Contexte (le + grand)</option>
-        <option value="price-in-asc">Trier : Prix entrée (le - cher)</option>
-        <option value="price-out-asc">Trier : Prix sortie (le - cher)</option>
-        <option value="free-first">Trier : Gratuit d'abord</option>
+        <option value="name" data-i18n="sortName">Trier : Nom (A-Z)</option>
+        <option value="ctx-desc" data-i18n="sortCtxDesc">Trier : Contexte (le + grand)</option>
+        <option value="price-in-asc" data-i18n="sortPriceInAsc">Trier : Prix entrée (le - cher)</option>
+        <option value="price-out-asc" data-i18n="sortPriceOutAsc">Trier : Prix sortie (le - cher)</option>
+        <option value="free-first" data-i18n="sortFreeFirst">Trier : Gratuit d'abord</option>
       </select>
     </div>
 
     <div class="or-sliders">
       <div class="or-slider-row">
-        <span class="osl-lbl">Contexte minimum <b id="or-ctx-label">Aucun minimum</b></span>
+        <span class="osl-lbl" data-i18n="ctxMin">Contexte minimum <b id="or-ctx-label" data-i18n="ctxNone">Aucun minimum</b></span>
         <input type="range" id="or-ctx-slider" min="0" max="11" step="1" value="0" oninput="renderOrCatalog('or')"/>
       </div>
       <div class="or-slider-row">
-        <span class="osl-lbl">Prix d'entrée max ($/M tokens) <b id="or-price-in-label">Illimité</b></span>
+        <span class="osl-lbl" data-i18n="priceInMax">Prix d'entrée max ($/M tokens) <b id="or-price-in-label" data-i18n="unlimited">Illimité</b></span>
         <input type="range" id="or-price-in-slider" min="0" max="11" step="1" value="11" oninput="renderOrCatalog('or')"/>
       </div>
       <div class="or-slider-row">
-        <span class="osl-lbl">Prix de sortie max ($/M tokens) <b id="or-price-out-label">Illimité</b></span>
+        <span class="osl-lbl" data-i18n="priceOutMax">Prix de sortie max ($/M tokens) <b id="or-price-out-label" data-i18n="unlimited">Illimité</b></span>
         <input type="range" id="or-price-out-slider" min="0" max="11" step="1" value="11" oninput="renderOrCatalog('or')"/>
       </div>
     </div>
 
-    <div id="or-status" style="font-size:11px;color:var(--muted);margin-bottom:8px">Chargement du catalogue OpenRouter...</div>
+    <div id="or-status" style="font-size:11px;color:var(--muted);margin-bottom:8px" data-i18n="orStatus">Chargement du catalogue OpenRouter...</div>
     <div class="or-head"><span class="or-h-name">Nom du modèle</span><span class="or-h-col">Contexte</span><span class="or-h-col">Saisir</span><span class="or-h-col">Sortir</span><span class="or-h-def"></span><span class="or-h-link"></span></div>
     <div id="or-results" style="max-height:420px;overflow-y:auto"></div>
-    <div class="or-warn-price">⚠ <strong>Les prix affichés viennent de l'API OpenRouter au moment du chargement de la page — ils peuvent changer.</strong> Clique sur ↗ pour vérifier le tarif à jour directement sur la fiche du modèle avant une utilisation intensive.</div>
-    <div class="or-note">ℹ Jetons hebdomadaires, latence et débit ne sont pas fournis par l'API publique d'OpenRouter (uniquement affichés sur leur site). Les catégories sont une estimation basée sur le nom/la description du modèle. Clique sur ↗ à côté d'un modèle pour voir sa fiche complète avec ces stats en direct.</div>
+    <div class="or-warn-price" data-i18n="orWarn">⚠ <strong>Les prix affichés viennent de l'API OpenRouter au moment du chargement de la page — ils peuvent changer.</strong> Clique sur ↗ pour vérifier le tarif à jour directement sur la fiche du modèle avant une utilisation intensive.</div>
+    <div class="or-note" data-i18n="orNote">ℹ Jetons hebdomadaires, latence et débit ne sont pas fournis par l'API publique d'OpenRouter (uniquement affichés sur leur site). Les catégories sont une estimation basée sur le nom/la description du modèle. Clique sur ↗ à côté d'un modèle pour voir sa fiche complète avec ces stats en direct.</div>
   </div>
 
   <button class="btn btn-green btn-full" onclick="next(2)">✓ Cette IA me convient — Étape suivante →</button>
@@ -484,54 +484,54 @@ details[open] .box-err summary::before{content:'▼ '}
 <div class="screen" id="sc-3">
 
   <div class="card">
-    <div class="card-title">🚀 Tout est prêt — Lance l'installation !</div>
-    <div class="card-sub">Un fichier va être téléchargé. Il installe automatiquement tout ce dont tu as besoin.</div>
+    <div class="card-title" data-i18n="installTitle">🚀 Tout est prêt — Lance l'installation !</div>
+    <div class="card-sub" data-i18n="installSub">Un fichier va être téléchargé. Il installe automatiquement tout ce dont tu as besoin.</div>
 
     <div class="sumtable">
-      <div class="sumrow"><span class="sk">Ta clé OpenRouter</span><span class="sv" id="sum-key">—</span></div>
-      <div class="sumrow"><span class="sk">Ton IA choisie</span><span class="sv" id="sum-model">—</span></div>
-      <div class="sumrow"><span class="sk">Ce qui sera installé</span><span class="sv" id="sum-tools">À déterminer...</span></div>
-      <div class="sumrow"><span class="sk">Coût total</span><span class="sv" style="color:var(--accent)">100% GRATUIT</span></div>
+      <div class="sumrow"><span class="sk" data-i18n="sumKey">Ta clé OpenRouter</span><span class="sv" id="sum-key">—</span></div>
+      <div class="sumrow"><span class="sk" data-i18n="sumModel">Ton IA choisie</span><span class="sv" id="sum-model">—</span></div>
+      <div class="sumrow"><span class="sk" data-i18n="sumTools">Ce qui sera installé</span><span class="sv" id="sum-tools">À déterminer...</span></div>
+      <div class="sumrow"><span class="sk" data-i18n="sumCost">Coût total</span><span class="sv" style="color:var(--accent)" data-i18n="costFree">100% GRATUIT</span></div>
     </div>
 
-    <button class="btn btn-green btn-full" id="btn-gen" onclick="generateSetup()">⬇ Télécharger mon fichier d'installation</button>
+    <button class="btn btn-green btn-full" id="btn-gen" onclick="generateSetup()" data-i18n="downloadBtn">⬇ Télécharger mon fichier d'installation</button>
 
     <div class="box-ok" id="dl-ok">
-      <div class="box-ok-title">✓ Fichier téléchargé : Setup_Claude_Code.ps1</div>
+      <div class="box-ok-title" data-i18n="dlOk">✓ Fichier téléchargé : Setup_Claude_Code.ps1</div>
 
       <div class="box-warn">
-        <div class="box-warn-title">⚠ IMPORTANT — Débloquer le fichier avant de lancer</div>
+        <div class="box-warn-title" data-i18n="warnBlockTitle">⚠ IMPORTANT — Débloquer le fichier avant de lancer</div>
         <div class="steps">
-          <div class="si"><div class="sn" style="background:var(--warn)">1</div><div class="st">Ouvre ton dossier <strong style="color:var(--warn)">Téléchargements</strong></div></div>
-          <div class="si"><div class="sn" style="background:var(--warn)">2</div><div class="st"><strong style="color:var(--warn)">Clic droit</strong> sur <strong>Setup_Claude_Code.ps1</strong> → <strong style="color:var(--warn)">"Propriétés"</strong></div></div>
-          <div class="si"><div class="sn" style="background:var(--warn)">3</div><div class="st">En bas, coche <strong style="color:var(--warn)">"Débloquer"</strong> → clique <strong style="color:var(--warn)">OK</strong><br><em>→ Windows bloque les fichiers .ps1 téléchargés d'internet, cette étape est obligatoire</em></div></div>
-          <div class="si"><div class="sn" style="background:var(--warn)">4</div><div class="st">Pas de case "Débloquer" ? C'est déjà bon. Continue.</div></div>
+          <div class="si"><div class="sn" style="background:var(--warn)">1</div><div class="st" data-i18n="warnBlock1">Ouvre ton dossier <strong style="color:var(--warn)">Téléchargements</strong></div></div>
+          <div class="si"><div class="sn" style="background:var(--warn)">2</div><div class="st" data-i18n="warnBlock2"><strong style="color:var(--warn)">Clic droit</strong> sur <strong>Setup_Claude_Code.ps1</strong> → <strong style="color:var(--warn)">"Propriétés"</strong></div></div>
+          <div class="si"><div class="sn" style="background:var(--warn)">3</div><div class="st" data-i18n="warnBlock3">En bas, coche <strong style="color:var(--warn)">"Débloquer"</strong> → clique <strong style="color:var(--warn)">OK</strong><br><em>→ Windows bloque les fichiers .ps1 téléchargés d'internet, cette étape est obligatoire</em></div></div>
+          <div class="si"><div class="sn" style="background:var(--warn)">4</div><div class="st" data-i18n="warnBlock4">Pas de case "Débloquer" ? C'est déjà bon. Continue.</div></div>
         </div>
       </div>
 
-      <div class="card-title" style="margin:1rem 0 10px">▶ Lancer l'installation</div>
+      <div class="card-title" style="margin:1rem 0 10px" data-i18n="runTitle">▶ Lancer l'installation</div>
       <div class="steps">
-        <div class="si"><div class="sn">1</div><div class="st"><strong>Clic droit</strong> sur <strong>Setup_Claude_Code.ps1</strong> → <strong>"Exécuter avec PowerShell"</strong><br><em>→ Une fenêtre noire s'ouvre</em></div></div>
-        <div class="si"><div class="sn">2</div><div class="st">Si Windows demande "Voulez-vous autoriser..." → clique <strong>Oui</strong><br><em>→ L'installation démarre (2 à 5 minutes selon ta connexion)</em></div></div>
-        <div class="si"><div class="sn">3</div><div class="st">Le script détecte ce que tu as déjà et n'installe que ce qui manque<br><em>→ Si tu as déjà VS Code ou Node.js, il passe directement</em></div></div>
-        <div class="si"><div class="sn">4</div><div class="st">À la fin, tu verras <strong style="color:var(--accent)">"INSTALLATION TERMINÉE"</strong> en vert<br><em>→ Le fichier Lancer Claude Code.ps1 est créé sur ton Bureau</em></div></div>
+        <div class="si"><div class="sn">1</div><div class="st" data-i18n="run1"><strong>Clic droit</strong> sur <strong>Setup_Claude_Code.ps1</strong> → <strong>"Exécuter avec PowerShell"</strong><br><em>→ Une fenêtre noire s'ouvre</em></div></div>
+        <div class="si"><div class="sn">2</div><div class="st" data-i18n="run2">Si Windows demande "Voulez-vous autoriser..." → clique <strong>Oui</strong><br><em>→ L'installation démarre (2 à 5 minutes selon ta connexion)</em></div></div>
+        <div class="si"><div class="sn">3</div><div class="st" data-i18n="run3">Le script détecte ce que tu as déjà et n'installe que ce qui manque<br><em>→ Si tu as déjà VS Code ou Node.js, il passe directement</em></div></div>
+        <div class="si"><div class="sn">4</div><div class="st" data-i18n="run4">À la fin, tu verras <strong style="color:var(--accent)">"INSTALLATION TERMINÉE"</strong> en vert<br><em>→ Le fichier Lancer Claude Code.ps1 est créé sur ton Bureau</em></div></div>
       </div>
 
       <div class="box-warn" style="margin-top:1rem">
-        <div class="box-warn-title">⚠ Ton antivirus bloque le fichier ?</div>
+        <div class="box-warn-title" data-i18n="avWarnTitle">⚠ Ton antivirus bloque le fichier ?</div>
         <div class="steps">
-          <div class="si"><div class="sn" style="background:var(--warn)">1</div><div class="st">Clique <strong style="color:var(--warn)">"Plus d'options"</strong> dans la popup de l'antivirus</div></div>
-          <div class="si"><div class="sn" style="background:var(--warn)">2</div><div class="st">Clique <strong style="color:var(--warn)">"Restaurer et ajouter une exception"</strong></div></div>
-          <div class="si"><div class="sn" style="background:var(--warn)">3</div><div class="st">Puis <strong style="color:var(--warn)">recommence à l'étape "Débloquer"</strong> ci-dessus</div></div>
+          <div class="si"><div class="sn" style="background:var(--warn)">1</div><div class="st" data-i18n="av1">Clique <strong style="color:var(--warn)">"Plus d'options"</strong> dans la popup de l'antivirus</div></div>
+          <div class="si"><div class="sn" style="background:var(--warn)">2</div><div class="st" data-i18n="av2">Clique <strong style="color:var(--warn)">"Restaurer et ajouter une exception"</strong></div></div>
+          <div class="si"><div class="sn" style="background:var(--warn)">3</div><div class="st" data-i18n="av3">Puis <strong style="color:var(--warn)">recommence à l'étape "Débloquer"</strong> ci-dessus</div></div>
         </div>
-        <p style="font-size:11px;color:var(--muted);margin-top:8px">C'est un faux positif fréquent sur les fichiers .ps1. Tu peux l'ouvrir avec le Bloc-notes pour vérifier — c'est du texte pur.</p>
+        <p style="font-size:11px;color:var(--muted);margin-top:8px" data-i18n="avNote">C'est un faux positif fréquent sur les fichiers .ps1. Tu peux l'ouvrir avec le Bloc-notes pour vérifier — c'est du texte pur.</p>
       </div>
 
-      <div class="card-title" style="margin:1.2rem 0 10px">▶ Utiliser ton IA chaque jour</div>
+      <div class="card-title" style="margin:1.2rem 0 10px" data-i18n="dailyTitle">▶ Utiliser ton IA chaque jour</div>
       <div class="steps">
-        <div class="si"><div class="sn">1</div><div class="st">Sur ton Bureau, <strong>clic droit</strong> sur <strong>Lancer Claude Code.ps1</strong></div></div>
-        <div class="si"><div class="sn">2</div><div class="st"><strong>"Exécuter avec PowerShell"</strong> → VS Code s'ouvre, Claude Code démarre en bas</div></div>
-        <div class="si"><div class="sn">3</div><div class="st"><strong>Tape ton message</strong> — ton IA (<span id="launched-model">DeepSeek V4 Flash</span>) te répond !</div></div>
+        <div class="si"><div class="sn">1</div><div class="st" data-i18n="daily1">Sur ton Bureau, <strong>clic droit</strong> sur <strong>Lancer Claude Code.ps1</strong></div></div>
+        <div class="si"><div class="sn">2</div><div class="st" data-i18n="daily2"><strong>"Exécuter avec PowerShell"</strong> → VS Code s'ouvre, Claude Code démarre en bas</div></div>
+        <div class="si"><div class="sn">3</div><div class="st" data-i18n="daily3"><strong>Tape ton message</strong> — ton IA (<span id="launched-model">DeepSeek V4 Flash</span>) te répond !</div></div>
       </div>
     </div>
   </div>
@@ -542,31 +542,31 @@ details[open] .box-err summary::before{content:'▼ '}
 <div class="screen" id="sc-4">
 
   <div class="card">
-    <div class="card-title">⚙ Changer ma configuration</div>
-    <div class="card-sub">Nouvelle clé ou nouvelle IA ? Modifie ici et télécharge un nouveau lanceur sans tout réinstaller.</div>
+    <div class="card-title" data-i18n="configTitle">⚙ Changer ma configuration</div>
+    <div class="card-sub" data-i18n="configSub">Nouvelle clé ou nouvelle IA ? Modifie ici et télécharge un nouveau lanceur sans tout réinstaller.</div>
 
     <div class="cfg-card">
       <div class="cfg-head">
-        <span class="cfg-title">🔑 Changer ma clé OpenRouter</span>
-        <span class="cfg-val" id="cfg-key-display">aucune clé active</span>
+        <span class="cfg-title" data-i18n="cfgKeyTitle">🔑 Changer ma clé OpenRouter</span>
+        <span class="cfg-val" id="cfg-key-display" data-i18n="cfgNoKey">aucune clé active</span>
       </div>
       <div class="row">
         <input type="password" id="cfg-key" placeholder="sk-or-v1-..."
           oninput="onCfgKeyInput()" onpaste="setTimeout(onCfgKeyInput,50)"
-          autocomplete="off"/>
+          autocomplete="off" data-i18n-placeholder="cfgKeyPlaceholder"/>
         <button class="btn btn-ghost" onclick="toggleVis('cfg-key',this)">Afficher</button>
       </div>
       <div class="kstatus">
         <div class="dot" id="ck-dot"></div>
-        <span class="stxt" id="ck-msg" style="color:var(--muted)">Nouvelle clé...</span>
+        <span class="stxt" id="ck-msg" style="color:var(--muted)" data-i18n="cfgKeyWaiting">Nouvelle clé...</span>
       </div>
       <button class="btn btn-green" id="btn-cfg-key" onclick="applyNewKey()" disabled style="font-size:11px;padding:9px 16px">Appliquer cette clé</button>
     </div>
 
     <div class="cfg-card">
       <div class="cfg-head">
-        <span class="cfg-title">🤖 Changer mon IA</span>
-        <span class="cfg-val" id="cfg-model-display">aucun modèle actif</span>
+        <span class="cfg-title" data-i18n="cfgModelTitle">🤖 Changer mon IA</span>
+        <span class="cfg-val" id="cfg-model-display" data-i18n="cfgNoModel">aucun modèle actif</span>
       </div>
       <div class="mgrid-mini">
         <div class="mmc" id="cm-deepseek" onclick="selCfgModel('deepseek/deepseek-v4-flash','cm-deepseek')"><div class="mmc-name">DeepSeek V4 Flash</div><div class="mmc-tag">★ Recommandé · 1M ctx</div></div>
@@ -586,23 +586,23 @@ details[open] .box-err summary::before{content:'▼ '}
 
     <div class="cfg-card">
       <div class="cfg-head">
-        <span class="cfg-title">🧩 Mes autres IA (catalogue complet)</span>
+        <span class="cfg-title" data-i18n="cfgExtraTitle">🧩 Mes autres IA (catalogue complet)</span>
       </div>
-      <div class="card-sub" style="margin-bottom:.8rem">Cherche, filtre, trie et coche/décoche les IA disponibles dans le menu de démarrage. Pris en compte tout de suite — pense à retélécharger le lanceur en bas.</div>
+      <div class="card-sub" style="margin-bottom:.8rem" data-i18n="cfgExtraSub">Cherche, filtre, trie et coche/décoche les IA disponibles dans le menu de démarrage. Pris en compte tout de suite — pense à retélécharger le lanceur en bas.</div>
 
       <div class="or-defaults">
         <div class="or-default-box">
-          <span class="odl">🆓 IA gratuite par défaut</span>
+          <span class="odl" data-i18n="defFree">🆓 IA gratuite par défaut</span>
           <span class="odv" id="orc-default-free-name">—</span>
         </div>
         <div class="or-default-box">
-          <span class="odl">💰 IA payante par défaut</span>
+          <span class="odl" data-i18n="defPaid">💰 IA payante par défaut</span>
           <span class="odv" id="orc-default-paid-name">—</span>
         </div>
       </div>
 
       <div class="row" style="margin-bottom:8px">
-        <input type="text" id="orc-search" placeholder="Rechercher (ex: gemini, mistral, claude, vision...)" oninput="renderOrCatalog('orc')"/>
+        <input type="text" id="orc-search" placeholder="Rechercher (ex: gemini, mistral, claude, vision...)" oninput="renderOrCatalog('orc')" data-i18n-placeholder="searchPlaceholder"/>
       </div>
 
       <div class="or-controls">
@@ -612,62 +612,62 @@ details[open] .box-err summary::before{content:'▼ '}
           <option value="paid">Payant uniquement</option>
         </select>
         <select id="orc-cat" onchange="renderOrCatalog('orc')">
-          <option value="all">Toutes catégories</option>
-          <option value="code">💻 Code</option>
-          <option value="reasoning">🧠 Raisonnement</option>
-          <option value="writing">✍️ Rédaction / SEO</option>
-          <option value="vision">👁 Vision / Multimodal</option>
-          <option value="fast">⚡ Rapide / Léger</option>
-          <option value="general">💬 Généraliste</option>
+          <option value="all" data-i18n="catAll">Toutes catégories</option>
+          <option value="code" data-i18n="catCode">💻 Code</option>
+          <option value="reasoning" data-i18n="catReasoning">🧠 Raisonnement</option>
+          <option value="writing" data-i18n="catWriting">✍️ Rédaction / SEO</option>
+          <option value="vision" data-i18n="catVision">👁 Vision / Multimodal</option>
+          <option value="fast" data-i18n="catFast">⚡ Rapide / Léger</option>
+          <option value="general" data-i18n="catGeneral">💬 Généraliste</option>
         </select>
         <select id="orc-sort" onchange="renderOrCatalog('orc')">
-          <option value="name">Trier : Nom (A-Z)</option>
-          <option value="ctx-desc">Trier : Contexte (le + grand)</option>
-          <option value="price-in-asc">Trier : Prix entrée (le - cher)</option>
-          <option value="price-out-asc">Trier : Prix sortie (le - cher)</option>
-          <option value="free-first">Trier : Gratuit d'abord</option>
+          <option value="name" data-i18n="sortName">Trier : Nom (A-Z)</option>
+          <option value="ctx-desc" data-i18n="sortCtxDesc">Trier : Contexte (le + grand)</option>
+          <option value="price-in-asc" data-i18n="sortPriceInAsc">Trier : Prix entrée (le - cher)</option>
+          <option value="price-out-asc" data-i18n="sortPriceOutAsc">Trier : Prix sortie (le - cher)</option>
+          <option value="free-first" data-i18n="sortFreeFirst">Trier : Gratuit d'abord</option>
         </select>
       </div>
 
       <div class="or-sliders">
         <div class="or-slider-row">
-          <span class="osl-lbl">Contexte minimum <b id="orc-ctx-label">Aucun minimum</b></span>
+          <span class="osl-lbl" data-i18n="ctxMin">Contexte minimum <b id="orc-ctx-label" data-i18n="ctxNone">Aucun minimum</b></span>
           <input type="range" id="orc-ctx-slider" min="0" max="11" step="1" value="0" oninput="renderOrCatalog('orc')"/>
         </div>
         <div class="or-slider-row">
-          <span class="osl-lbl">Prix d'entrée max ($/M tokens) <b id="orc-price-in-label">Illimité</b></span>
+          <span class="osl-lbl" data-i18n="priceInMax">Prix d'entrée max ($/M tokens) <b id="orc-price-in-label" data-i18n="unlimited">Illimité</b></span>
           <input type="range" id="orc-price-in-slider" min="0" max="11" step="1" value="11" oninput="renderOrCatalog('orc')"/>
         </div>
         <div class="or-slider-row">
-          <span class="osl-lbl">Prix de sortie max ($/M tokens) <b id="orc-price-out-label">Illimité</b></span>
+          <span class="osl-lbl" data-i18n="priceOutMax">Prix de sortie max ($/M tokens) <b id="orc-price-out-label" data-i18n="unlimited">Illimité</b></span>
           <input type="range" id="orc-price-out-slider" min="0" max="11" step="1" value="11" oninput="renderOrCatalog('orc')"/>
         </div>
       </div>
 
-      <div id="orc-status" style="font-size:11px;color:var(--muted);margin-bottom:8px">Chargement du catalogue OpenRouter...</div>
+      <div id="orc-status" style="font-size:11px;color:var(--muted);margin-bottom:8px" data-i18n="orStatus">Chargement du catalogue OpenRouter...</div>
       <div class="or-head"><span class="or-h-name">Nom du modèle</span><span class="or-h-col">Contexte</span><span class="or-h-col">Saisir</span><span class="or-h-col">Sortir</span><span class="or-h-def"></span><span class="or-h-link"></span></div>
       <div id="orc-results" style="max-height:420px;overflow-y:auto"></div>
-      <div class="or-warn-price">⚠ <strong>Les prix viennent de l'API OpenRouter au chargement de la page — ils peuvent changer.</strong> Vérifie toujours le tarif à jour via le lien ↗.</div>
-      <div class="or-note">ℹ Jetons hebdomadaires, latence et débit ne sont pas fournis par l'API publique d'OpenRouter. Catégories estimées d'après le nom/la description. Clique sur ↗ pour voir la fiche complète du modèle.</div>
-      <p style="font-size:11px;color:var(--gold);line-height:1.6;margin-top:6px">⬇ Chaque ajout/retrait ci-dessus fait apparaître le bouton <strong>"Télécharger le nouveau lanceur"</strong> juste en dessous — pense à le retélécharger et à remplacer le fichier sur ton Bureau, sinon tes nouvelles IA ne seront pas disponibles au démarrage.</p>
+      <div class="or-warn-price" data-i18n="orWarn">⚠ <strong>Les prix viennent de l'API OpenRouter au chargement de la page — ils peuvent changer.</strong> Vérifie toujours le tarif à jour via le lien ↗.</div>
+      <div class="or-note" data-i18n="orNote">ℹ Jetons hebdomadaires, latence et débit ne sont pas fournis par l'API publique d'OpenRouter. Catégories estimées d'après le nom/la description. Clique sur ↗ pour voir la fiche complète du modèle.</div>
+      <p style="font-size:11px;color:var(--gold);line-height:1.6;margin-top:6px" data-i18n="cfgExtraNote">⬇ Chaque ajout/retrait ci-dessus fait apparaître le bouton <strong>"Télécharger le nouveau lanceur"</strong> juste en dessous — pense à le retélécharger et à remplacer le fichier sur ton Bureau, sinon tes nouvelles IA ne seront pas disponibles au démarrage.</p>
     </div>
 
     <div class="regen-box" id="regen-box">
-      <div class="cfg-title" style="margin-bottom:10px;color:var(--accent)">Télécharger mon nouveau lanceur</div>
+      <div class="cfg-title" style="margin-bottom:10px;color:var(--accent)" data-i18n="regenBoxTitle">Télécharger mon nouveau lanceur</div>
       <div class="sumtable" style="margin-bottom:10px">
-        <div class="sumrow"><span class="sk">Clé</span><span class="sv" id="regen-key">—</span></div>
-        <div class="sumrow"><span class="sk">IA</span><span class="sv" id="regen-model">—</span></div>
+        <div class="sumrow"><span class="sk" data-i18n="regenKey">Clé</span><span class="sv" id="regen-key">—</span></div>
+        <div class="sumrow"><span class="sk" data-i18n="regenModel">IA</span><span class="sv" id="regen-model">—</span></div>
       </div>
-      <p style="font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.7">
+      <p style="font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.7" data-i18n="regenDesc">
         Télécharge un nouveau <strong style="color:var(--accent)">Lancer Claude Code.ps1</strong>. Remplace l'ancien fichier sur ton Bureau — clic droit → Propriétés → Débloquer si nécessaire.
       </p>
-      <button class="btn btn-green btn-full" onclick="regenLauncher()" style="margin-top:0">⬇ Télécharger le nouveau lanceur</button>
+      <button class="btn btn-green btn-full" onclick="regenLauncher()" style="margin-top:0" data-i18n="regenBtn">⬇ Télécharger le nouveau lanceur</button>
       <div class="box-ok" id="regen-ok" style="margin-top:10px">
-        <div class="box-ok-title">✓ Nouveau lanceur téléchargé</div>
+        <div class="box-ok-title" data-i18n="regenOk">✓ Nouveau lanceur téléchargé</div>
         <div class="steps" style="margin-top:8px">
-          <div class="si"><div class="sn">1</div><div class="st">Copie <strong>Lancer Claude Code.ps1</strong> sur ton Bureau (remplace l'ancien)</div></div>
-          <div class="si"><div class="sn">2</div><div class="st"><strong>Clic droit</strong> → <strong>Propriétés</strong> → coche <strong>Débloquer</strong> si visible → OK</div></div>
-          <div class="si"><div class="sn">3</div><div class="st"><strong>Clic droit</strong> → <strong>Exécuter avec PowerShell</strong> → ta nouvelle IA démarre</div></div>
+          <div class="si"><div class="sn">1</div><div class="st" data-i18n="regenStep1">Copie <strong>Lancer Claude Code.ps1</strong> sur ton Bureau (remplace l'ancien)</div></div>
+          <div class="si"><div class="sn">2</div><div class="st" data-i18n="regenStep2"><strong>Clic droit</strong> → <strong>Propriétés</strong> → coche <strong>Débloquer</strong> si visible → OK</div></div>
+          <div class="si"><div class="sn">3</div><div class="st" data-i18n="regenStep3"><strong>Clic droit</strong> → <strong>Exécuter avec PowerShell</strong> → ta nouvelle IA démarre</div></div>
         </div>
       </div>
     </div>
@@ -680,47 +680,47 @@ details[open] .box-err summary::before{content:'▼ '}
 
   <!-- GUIDE /MODEL COMPLET EN FRANÇAIS -->
   <div class="card" style="border-color:var(--gold)">
-    <div class="card-title" style="color:var(--gold)">🎯 Comment utiliser /model pour changer d'IA</div>
-    <div class="card-sub">Le guide pas-à-pas pour les débutants qui ne parlent pas anglais.</div>
+    <div class="card-title" style="color:var(--gold)" data-i18n="helpModelGuide">🎯 Comment utiliser /model pour changer d'IA</div>
+    <div class="card-sub" data-i18n="helpModelSub">Le guide pas-à-pas pour les débutants qui ne parlent pas anglais.</div>
 
     <div class="guide-card">
-      <h4>📌 Nouveau : le menu de démarrage multi-IA</h4>
-      <p style="font-size:12px;line-height:1.7;color:var(--muted)">
+      <h4 data-i18n="helpNew">📌 Nouveau : le menu de démarrage multi-IA</h4>
+      <p style="font-size:12px;line-height:1.7;color:var(--muted)" data-i18n="helpNewText">
         Si tu as installé plusieurs IA (onglet <strong style="color:var(--gold)">① Ma clé / ② Mon IA</strong> ou <strong style="color:var(--gold)">⚙ Modifier</strong>), <strong>Lancer Claude Code.ps1</strong> affiche maintenant un petit menu numéroté à chaque démarrage. Tape le numéro de l'IA que tu veux, ou appuie directement sur <strong>Entrée</strong> pour utiliser ton IA par défaut. Toutes ces IA utilisent <strong style="color:var(--accent)">la même clé OpenRouter</strong> — pas besoin d'en recréer une.
       </p>
     </div>
 
     <div class="guide-card">
-      <h4>📌 Pourquoi changer d'IA ?</h4>
-      <p style="font-size:12px;line-height:1.7;color:var(--muted)">
+      <h4 data-i18n="helpWhy">📌 Pourquoi changer d'IA ?</h4>
+      <p style="font-size:12px;line-height:1.7;color:var(--muted)" data-i18n="helpWhyText">
         Si ton IA actuelle est lente, surchargée ou ne répond plus, tu peux en essayer une autre gratuitement. C'est normal sur les IA gratuites — elles sont parfois saturées le soir.
       </p>
     </div>
 
     <div class="guide-card">
-      <h4>📌 Commande /model — Le pas-à-pas</h4>
+      <h4 data-i18n="helpHow">📌 Commande /model — Le pas-à-pas</h4>
       <ol class="step-list">
-        <li>Dans Claude Code, <strong>tape</strong> <code>/model</code> et appuie sur <strong>Entrée</strong></li>
-        <li>Une liste apparaît avec des numéros de <strong>1 à 6</strong></li>
-        <li><strong>Ignore les options 1 à 5</strong> — ce sont les IA payantes d'Anthropic (Claude Opus, Sonnet, etc.)</li>
-        <li>Descends jusqu'à l'<strong>option 6</strong> qui s'appelle <strong>"Custom model"</strong> (modèle personnalisé)</li>
-        <li>Appuie sur <strong>Entrée</strong> pour sélectionner l'option 6</li>
-        <li>La console te demande : <em>"Enter custom model ID:"</em></li>
-        <li>Tape l'identifiant exact de ton IA, par exemple :<br>
+        <li data-i18n="helpHow1">Dans Claude Code, <strong>tape</strong> <code>/model</code> et appuie sur <strong>Entrée</strong></li>
+        <li data-i18n="helpHow2">Une liste apparaît avec des numéros de <strong>1 à 6</strong></li>
+        <li data-i18n="helpHow3"><strong>Ignore les options 1 à 5</strong> — ce sont les IA payantes d'Anthropic (Claude Opus, Sonnet, etc.)</li>
+        <li data-i18n="helpHow4">Descends jusqu'à l'<strong>option 6</strong> qui s'appelle <strong>"Custom model"</strong> (modèle personnalisé)</li>
+        <li data-i18n="helpHow5">Appuie sur <strong>Entrée</strong> pour sélectionner l'option 6</li>
+        <li data-i18n="helpHow6">La console te demande : <em>"Enter custom model ID:"</em></li>
+        <li data-i18n="helpHow7">Tape l'identifiant exact de ton IA, par exemple :<br>
           <code>deepseek/deepseek-v4-flash</code> (DeepSeek V4)<br>
           <code>qwen/qwen3-coder:free</code> (Qwen3 Coder)<br>
           <code>meta-llama/llama-3.3-70b-instruct:free</code> (Llama 3.3)</li>
-        <li>Appuie sur <strong>Entrée</strong> une fois que tu as tapé l'identifiant</li>
-        <li>Claude Code va te demander si tu veux en faire ton modèle <strong>par défaut</strong> (toujours celui-là) ou juste <strong>pour cette session</strong> (une fois). Choisis "par défaut" si tu l'aimes bien.</li>
+        <li data-i18n="helpHow8">Appuie sur <strong>Entrée</strong> une fois que tu as tapé l'identifiant</li>
+        <li data-i18n="helpHow9">Claude Code va te demander si tu veux en faire ton modèle <strong>par défaut</strong> (toujours celui-là) ou juste <strong>pour cette session</strong> (une fois). Choisis "par défaut" si tu l'aimes bien.</li>
       </ol>
-      <div class="callout">
+      <div class="callout" data-i18n="helpShortcut">
         💡 <strong>Raccourci :</strong> Tu peux aussi taper directement <code>/model deepseek/deepseek-v4-flash</code> en une seule fois, ça va plus vite !
       </div>
     </div>
 
     <div class="guide-card">
-      <h4>📌 Que signifient les options 1 à 5 ?</h4>
-      <div style="font-size:11px;color:var(--muted);line-height:1.8">
+      <h4 data-i18n="helpOptions">📌 Que signifient les options 1 à 5 ?</h4>
+      <div style="font-size:11px;color:var(--muted);line-height:1.8" data-i18n="helpOptionsText">
         Les options <strong>1 à 5</strong> correspondent aux modèles <strong>Claude Anthropic</strong> (Opus, Sonnet, Haiku...).<br>
         Ce sont les versions officielles de Claude, <strong>payantes</strong> (Anthropic facture à l'usage).<br>
         L'option <strong>6 "Custom model"</strong> est celle qui utilise ta clé OpenRouter — donc <strong>gratuite</strong>.<br>
@@ -731,53 +731,53 @@ details[open] .box-err summary::before{content:'▼ '}
 
   <!-- COMMANDES CLAUDE CODE -->
   <div class="card">
-    <div class="card-title">📖 Toutes les commandes utiles de Claude Code</div>
-    <div class="card-sub">Les commandes essentielles expliquées en français.</div>
+    <div class="card-title" data-i18n="cmdTitle">📖 Toutes les commandes utiles de Claude Code</div>
+    <div class="card-sub" data-i18n="cmdSub">Les commandes essentielles expliquées en français.</div>
 
     <div class="model-cmd">
-      <h4>/model — Changer d'IA</h4>
+      <h4 data-i18n="cmd1Title">/model — Changer d'IA</h4>
       <code>/model</code>
-      <p>Affiche la liste des IA. Utilise les flèches <strong>↑ ↓</strong> pour naviguer. Sélectionne l'option 6 pour ton IA gratuite OpenRouter. Tu peux aussi taper <code>/model deepseek/deepseek-v4-flash</code> directement.</p>
+      <p data-i18n="cmd1Text">Affiche la liste des IA. Utilise les flèches <strong>↑ ↓</strong> pour naviguer. Sélectionne l'option 6 pour ton IA gratuite OpenRouter. Tu peux aussi taper <code>/model deepseek/deepseek-v4-flash</code> directement.</p>
     </div>
 
     <div class="model-cmd">
-      <h4>/logout — Se déconnecter</h4>
+      <h4 data-i18n="cmd2Title">/logout — Se déconnecter</h4>
       <code>/logout</code>
-      <p>À utiliser si Claude Code te demande de te connecter à un compte Anthropic. Cette commande efface le cache et permet d'utiliser OpenRouter.</p>
+      <p data-i18n="cmd2Text">À utiliser si Claude Code te demande de te connecter à un compte Anthropic. Cette commande efface le cache et permet d'utiliser OpenRouter.</p>
     </div>
 
     <div class="model-cmd">
-      <h4>/clear — Effacer la conversation</h4>
+      <h4 data-i18n="cmd3Title">/clear — Effacer la conversation</h4>
       <code>/clear</code>
-      <p>Efface tout l'historique de ta discussion. Utile si la conversation devient longue ou si ton IA commence à ralentir. <strong>C'est la commande la plus utile au quotidien.</strong></p>
+      <p data-i18n="cmd3Text">Efface tout l'historique de ta discussion. Utile si la conversation devient longue ou si ton IA commence à ralentir. <strong>C'est la commande la plus utile au quotidien.</strong></p>
     </div>
 
     <div class="model-cmd">
-      <h4>/help — Aide complète (en anglais)</h4>
+      <h4 data-i18n="cmd4Title">/help — Aide complète (en anglais)</h4>
       <code>/help</code>
-      <p>Affiche toutes les commandes disponibles. C'est en anglais mais les commandes sont simples : <strong>/init</strong> (analyser ton projet), <strong>/status</strong> (voir l'état), <strong>/add</strong> (ajouter un fichier).</p>
+      <p data-i18n="cmd4Text">Affiche toutes les commandes disponibles. C'est en anglais mais les commandes sont simples : <strong>/init</strong> (analyser ton projet), <strong>/status</strong> (voir l'état), <strong>/add</strong> (ajouter un fichier).</p>
     </div>
 
     <div class="model-cmd">
-      <h4>/init — Analyser ton projet</h4>
+      <h4 data-i18n="cmd5Title">/init — Analyser ton projet</h4>
       <code>/init</code>
-      <p>Demande à Claude Code d'analyser ton projet et de comprendre son architecture. Utile quand tu commences à travailler sur un dossier existant.</p>
+      <p data-i18n="cmd5Text">Demande à Claude Code d'analyser ton projet et de comprendre son architecture. Utile quand tu commences à travailler sur un dossier existant.</p>
     </div>
 
     <div class="model-cmd">
-      <h4>💬 Parler à ton IA</h4>
+      <h4 data-i18n="cmd6Title">💬 Parler à ton IA</h4>
       <code>Tape ton message et appuie sur Entrée</code>
-      <p>Tu peux lui demander en français de : créer des fichiers, modifier du code, expliquer des erreurs, créer un site web, etc. Les IA gratuites comprennent très bien le français.</p>
+      <p data-i18n="cmd6Text">Tu peux lui demander en français de : créer des fichiers, modifier du code, expliquer des erreurs, créer un site web, etc. Les IA gratuites comprennent très bien le français.</p>
     </div>
   </div>
 
   <!-- SECTION ERREURS -->
   <div class="err-section">
-    <h3>🔧 Messages d'erreur expliqués (clique pour voir la solution)</h3>
+    <h3 data-i18n="errTitle">🔧 Messages d'erreur expliqués (clique pour voir la solution)</h3>
 
     <div class="card">
       <details>
-        <summary class="box-err"><strong>"There's an issue with the selected model"</strong></summary>
+        <summary class="box-err"><strong data-i18n="err1Title">"There's an issue with the selected model"</strong></summary>
         <div style="padding:10px 0 0">
           <p><strong>Ce qui se passe :</strong> Le modèle choisi n'est pas disponible ou n'est pas reconnu par OpenRouter.</p>
           <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solution :</strong><br>
@@ -789,7 +789,7 @@ details[open] .box-err summary::before{content:'▼ '}
       </details>
 
       <details>
-        <summary class="box-err"><strong>"API error · Retrying in 2s · attempt X/10"</strong></summary>
+        <summary class="box-err"><strong data-i18n="err2Title">"API error · Retrying in 2s · attempt X/10"</strong></summary>
         <div style="padding:10px 0 0">
           <p><strong>Ce qui se passe :</strong> L'IA gratuite est surchargée (trop de monde l'utilise en même temps). C'est normal, ça arrive surtout le soir.</p>
           <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solutions :</strong><br>
@@ -801,7 +801,7 @@ details[open] .box-err summary::before{content:'▼ '}
       </details>
 
       <details>
-        <summary class="box-err"><strong>"openrouter/owl-alpha · API Usage Billing"</strong></summary>
+        <summary class="box-err"><strong data-i18n="err3Title">"openrouter/owl-alpha · API Usage Billing"</strong></summary>
         <div style="padding:10px 0 0">
           <p><strong>Ce qui se passe :</strong> Claude Code a sélectionné automatiquement Owl Alpha (le modèle par défaut d'OpenRouter). C'est normal — la connexion fonctionne !</p>
           <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solution :</strong><br>
@@ -810,7 +810,7 @@ details[open] .box-err summary::before{content:'▼ '}
       </details>
 
       <details>
-        <summary class="box-err"><strong>"Authentication failed" ou "Invalid API key"</strong></summary>
+        <summary class="box-err"><strong data-i18n="err4Title">"Authentication failed" ou "Invalid API key"</strong></summary>
         <div style="padding:10px 0 0">
           <p><strong>Ce qui se passe :</strong> Ta clé OpenRouter n'est pas reconnue.</p>
           <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solutions :</strong><br>
@@ -822,7 +822,7 @@ details[open] .box-err summary::before{content:'▼ '}
       </details>
 
       <details>
-        <summary class="box-err"><strong>"Cannot be loaded because running scripts is disabled"</strong></summary>
+        <summary class="box-err"><strong data-i18n="err5Title">"Cannot be loaded because running scripts is disabled"</strong></summary>
         <div style="padding:10px 0 0">
           <p><strong>Ce qui se passe :</strong> Windows bloque l'exécution des scripts PowerShell. C'est une sécurité normale de Windows.</p>
           <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solution :</strong><br>
@@ -836,7 +836,7 @@ details[open] .box-err summary::before{content:'▼ '}
       </details>
 
       <details>
-        <summary class="box-err"><strong>Le fichier .ps1 s'ouvre dans le Bloc-notes au lieu de s'exécuter</strong></summary>
+        <summary class="box-err"><strong data-i18n="err6Title">Le fichier .ps1 s'ouvre dans le Bloc-notes au lieu de s'exécuter</strong></summary>
         <div style="padding:10px 0 0">
           <p><strong>Ce qui se passe :</strong> Windows a associé les fichiers .ps1 au Bloc-notes au lieu de PowerShell.</p>
           <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solution :</strong><br>
@@ -846,7 +846,7 @@ details[open] .box-err summary::before{content:'▼ '}
       </details>
 
       <details>
-        <summary class="box-err"><strong>Claude Code demande de se connecter / "Login to continue"</strong></summary>
+        <summary class="box-err"><strong data-i18n="err7Title">Claude Code demande de se connecter / "Login to continue"</strong></summary>
         <div style="padding:10px 0 0">
           <p><strong>Ce qui se passe :</strong> Claude Code détecte un conflit entre ta session Anthropic et la config OpenRouter.</p>
           <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solution :</strong><br>
@@ -857,7 +857,7 @@ details[open] .box-err summary::before{content:'▼ '}
       </details>
 
       <details>
-        <summary class="box-err"><strong>L'IA répond lentement ou "timeout"</strong></summary>
+        <summary class="box-err"><strong data-i18n="err8Title">L'IA répond lentement ou "timeout"</strong></summary>
         <div style="padding:10px 0 0">
           <p><strong>Ce qui se passe :</strong> Le modèle gratuit est saturé (trop d'utilisateurs en même temps). Les modèles gratuits ont des files d'attente.</p>
           <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solutions :</strong><br>
@@ -875,18 +875,18 @@ details[open] .box-err summary::before{content:'▼ '}
 <!-- ====== MODAL : INFO AVANT OUVERTURE D'OPENROUTER ====== -->
 <div class="modal-overlay" id="or-modal" onclick="if(event.target===this) closeOrModal()">
   <div class="modal-box">
-    <div class="modal-title">ℹ Avant d'ouvrir OpenRouter</div>
-    <div class="box-info" style="margin-bottom:10px">
+    <div class="modal-title" data-i18n="modalTitle">ℹ Avant d'ouvrir OpenRouter</div>
+    <div class="box-info" style="margin-bottom:10px" data-i18n="modalInfo">
       <strong>Limites quotidiennes des modèles gratuits (:free)</strong><br>
       Sur OpenRouter, la limite de requêtes/jour des modèles <code style="background:var(--bg);color:var(--warn);font-family:'Courier New',monospace;padding:1px 5px">:free</code> dépend des crédits que tu as achetés : moins de 10 crédits achetés → <strong>50 requêtes/jour</strong> ; à partir de 10 crédits achetés → <strong style="color:var(--accent)">1000 requêtes/jour</strong>.
     </div>
     <div class="box-warn" style="margin:0">
-      <div class="box-warn-title">⚠ Important</div>
+      <div class="box-warn-title" data-i18n="modalWarn">⚠ Important</div>
       <p style="font-size:12px;line-height:1.7;color:#ffddaa">Un minimum de <strong style="color:var(--warn)">5€ de crédit</strong> sur ton compte OpenRouter est nécessaire pour pouvoir utiliser les modèles — <strong>y compris les gratuits</strong> — avec Claude Code.</p>
     </div>
     <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeOrModal()" style="flex:1">Annuler</button>
-      <button class="btn btn-blue" onclick="confirmOpenOr()" style="flex:2">✓ Compris — Ouvrir OpenRouter</button>
+      <button class="btn btn-ghost" onclick="closeOrModal()" style="flex:1" data-i18n="modalCancel">Annuler</button>
+      <button class="btn btn-blue" onclick="confirmOpenOr()" style="flex:2" data-i18n="modalConfirm">✓ Compris — Ouvrir OpenRouter</button>
     </div>
   </div>
 </div>
@@ -894,7 +894,7 @@ details[open] .box-err summary::before{content:'▼ '}
 <!-- ====== FOOTER ====== -->
 <div class="footer">
   <span>STRAMM-<span class="fa">FUSION</span></span>
-  <span>V2 • Clé locale • Zéro tracking • 100% gratuit</span>
+  <span data-i18n="footer">V2 • Clé locale • Zéro tracking • 100% gratuit</span>
 </div>
 
 </div>
