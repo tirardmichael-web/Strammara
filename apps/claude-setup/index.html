@@ -337,7 +337,7 @@ details[open] .box-err summary::before{content:'▼ '}
       <input type="password" id="api-key" placeholder="sk-or-v1-..."
         oninput="onKeyInput()" onpaste="setTimeout(onKeyInput,50)"
         autocomplete="off" data-i18n-placeholder="keyPlaceholder"/>
-      <button class="btn btn-ghost" onclick="toggleVis('api-key',this)">Afficher</button>
+      <button class="btn btn-ghost" onclick="toggleVis('api-key',this)" data-i18n="btnShow">Afficher</button>
     </div>
     <div class="kstatus">
       <div class="dot" id="k-dot"></div>
@@ -433,9 +433,9 @@ details[open] .box-err summary::before{content:'▼ '}
 
     <div class="or-controls">
       <select id="or-freepaid" onchange="renderOrCatalog('or')">
-        <option value="all">Gratuit + Payant</option>
-        <option value="free">Gratuit uniquement</option>
-        <option value="paid">Payant uniquement</option>
+        <option value="all" data-i18n="filterAll">Gratuit + Payant</option>
+        <option value="free" data-i18n="filterFree">Gratuit uniquement</option>
+        <option value="paid" data-i18n="filterPaid">Payant uniquement</option>
       </select>
       <select id="or-cat" onchange="renderOrCatalog('or')">
         <option value="all" data-i18n="catAll">Toutes catégories</option>
@@ -471,7 +471,7 @@ details[open] .box-err summary::before{content:'▼ '}
     </div>
 
     <div id="or-status" style="font-size:11px;color:var(--muted);margin-bottom:8px" data-i18n="orStatus">Chargement du catalogue OpenRouter...</div>
-    <div class="or-head"><span class="or-h-name">Nom du modèle</span><span class="or-h-col">Contexte</span><span class="or-h-col">Saisir</span><span class="or-h-col">Sortir</span><span class="or-h-def"></span><span class="or-h-link"></span></div>
+    <div class="or-head"><span class="or-h-name" data-i18n="colName">Nom du modèle</span><span class="or-h-col" data-i18n="colContext">Contexte</span><span class="or-h-col" data-i18n="colInput">Saisir</span><span class="or-h-col" data-i18n="colOutput">Sortir</span><span class="or-h-def"></span><span class="or-h-link"></span></div>
     <div id="or-results" style="max-height:420px;overflow-y:auto"></div>
     <div class="or-warn-price" data-i18n="orWarn">⚠ <strong>Les prix affichés viennent de l'API OpenRouter au moment du chargement de la page — ils peuvent changer.</strong> Clique sur ↗ pour vérifier le tarif à jour directement sur la fiche du modèle avant une utilisation intensive.</div>
     <div class="or-note" data-i18n="orNote">ℹ Jetons hebdomadaires, latence et débit ne sont pas fournis par l'API publique d'OpenRouter (uniquement affichés sur leur site). Les catégories sont une estimation basée sur le nom/la description du modèle. Clique sur ↗ à côté d'un modèle pour voir sa fiche complète avec ces stats en direct.</div>
@@ -554,13 +554,13 @@ details[open] .box-err summary::before{content:'▼ '}
         <input type="password" id="cfg-key" placeholder="sk-or-v1-..."
           oninput="onCfgKeyInput()" onpaste="setTimeout(onCfgKeyInput,50)"
           autocomplete="off" data-i18n-placeholder="cfgKeyPlaceholder"/>
-        <button class="btn btn-ghost" onclick="toggleVis('cfg-key',this)">Afficher</button>
+        <button class="btn btn-ghost" onclick="toggleVis('cfg-key',this)" data-i18n="btnShow">Afficher</button>
       </div>
       <div class="kstatus">
         <div class="dot" id="ck-dot"></div>
         <span class="stxt" id="ck-msg" style="color:var(--muted)" data-i18n="cfgKeyWaiting">Nouvelle clé...</span>
       </div>
-      <button class="btn btn-green" id="btn-cfg-key" onclick="applyNewKey()" disabled style="font-size:11px;padding:9px 16px">Appliquer cette clé</button>
+      <button class="btn btn-green" id="btn-cfg-key" onclick="applyNewKey()" disabled style="font-size:11px;padding:9px 16px" data-i18n="btnApplyKey">Appliquer cette clé</button>
     </div>
 
     <div class="cfg-card">
@@ -581,7 +581,7 @@ details[open] .box-err summary::before{content:'▼ '}
         <div class="mmc" id="cm-cust" onclick="document.getElementById('cfg-custom-m').focus()"><div class="mmc-name">Autre modèle</div><div class="mmc-tag">Identifiant manuel</div></div>
       </div>
       <div class="row"><input type="text" id="cfg-custom-m" placeholder="Identifiant exact..." oninput="cfgCustomM()"/></div>
-      <button class="btn btn-warn" id="btn-cfg-model" onclick="applyNewModel()" disabled style="font-size:11px;padding:9px 16px">Appliquer ce choix</button>
+      <button class="btn btn-warn" id="btn-cfg-model" onclick="applyNewModel()" disabled style="font-size:11px;padding:9px 16px" data-i18n="btnApplyModel">Appliquer ce choix</button>
     </div>
 
     <div class="cfg-card">
@@ -607,9 +607,9 @@ details[open] .box-err summary::before{content:'▼ '}
 
       <div class="or-controls">
         <select id="orc-freepaid" onchange="renderOrCatalog('orc')">
-          <option value="all">Gratuit + Payant</option>
-          <option value="free">Gratuit uniquement</option>
-          <option value="paid">Payant uniquement</option>
+          <option value="all" data-i18n="filterAll">Gratuit + Payant</option>
+          <option value="free" data-i18n="filterFree">Gratuit uniquement</option>
+          <option value="paid" data-i18n="filterPaid">Payant uniquement</option>
         </select>
         <select id="orc-cat" onchange="renderOrCatalog('orc')">
           <option value="all" data-i18n="catAll">Toutes catégories</option>
@@ -645,7 +645,7 @@ details[open] .box-err summary::before{content:'▼ '}
       </div>
 
       <div id="orc-status" style="font-size:11px;color:var(--muted);margin-bottom:8px" data-i18n="orStatus">Chargement du catalogue OpenRouter...</div>
-      <div class="or-head"><span class="or-h-name">Nom du modèle</span><span class="or-h-col">Contexte</span><span class="or-h-col">Saisir</span><span class="or-h-col">Sortir</span><span class="or-h-def"></span><span class="or-h-link"></span></div>
+      <div class="or-head"><span class="or-h-name" data-i18n="colName">Nom du modèle</span><span class="or-h-col" data-i18n="colContext">Contexte</span><span class="or-h-col" data-i18n="colInput">Saisir</span><span class="or-h-col" data-i18n="colOutput">Sortir</span><span class="or-h-def"></span><span class="or-h-link"></span></div>
       <div id="orc-results" style="max-height:420px;overflow-y:auto"></div>
       <div class="or-warn-price" data-i18n="orWarn">⚠ <strong>Les prix viennent de l'API OpenRouter au chargement de la page — ils peuvent changer.</strong> Vérifie toujours le tarif à jour via le lien ↗.</div>
       <div class="or-note" data-i18n="orNote">ℹ Jetons hebdomadaires, latence et débit ne sont pas fournis par l'API publique d'OpenRouter. Catégories estimées d'après le nom/la description. Clique sur ↗ pour voir la fiche complète du modèle.</div>
