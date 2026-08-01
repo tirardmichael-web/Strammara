@@ -459,18 +459,18 @@ if(/Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(navigator.userAgent)){
 
     <div class="mgrid">
       <!-- DeepSeek V4 Flash — Recommandé -->
-      <div class="mc reco sel" id="m-deepseek" onclick="selModel('deepseek/deepseek-v4-flash','m-deepseek')">
+      <div class="mc reco sel" id="m-deepseek" onclick="selModel('nvidia/nemotron-3-ultra-550b-a55b:free','m-deepseek')">
         <div class="mc-tag" style="color:var(--gold)" data-i18n="recoTag">★ RECOMMANDÉ</div>
-        <div class="mc-name" data-i18n="deepseekName">DeepSeek V4 Flash (Payant)</div>
-        <div class="mc-ctx" data-i18n="deepseekCtx">Contexte : 1M tokens</div>
-        <div class="mc-desc" data-i18n="deepseekDesc">Raisonnement puissant, excellent en code, 1M de contexte. Le meilleur rapport qualité/prix pour Claude Code.</div>
-      </div>
-      <!-- Nemotron Ultra — Gratuit -->
-      <div class="mc" id="m-ultra" onclick="selModel('nvidia/nemotron-3-ultra-550b-a55b:free','m-ultra')">
-        <div class="mc-tag" style="color:var(--accent)" data-i18n="ultraTag">GRATUIT</div>
         <div class="mc-name" data-i18n="ultraName">Nemotron 3 Ultra</div>
         <div class="mc-ctx" data-i18n="ultraCtx">Contexte : 1M tokens</div>
         <div class="mc-desc" data-i18n="ultraDesc">Modèle NVIDIA très grand (550B params), excellent en raisonnement et en code. Gratuit sur OpenRouter.</div>
+      </div>
+      <!-- DeepSeek V4 Flash — Payant -->
+      <div class="mc" id="m-ultra" onclick="selModel('deepseek/deepseek-v4-flash','m-ultra')">
+        <div class="mc-tag" style="color:var(--warn)">PAYANT</div>
+        <div class="mc-name">DeepSeek V4 Flash</div>
+        <div class="mc-ctx">Contexte : 1M tokens</div>
+        <div class="mc-desc">Raisonnement puissant, excellent en code. Meilleur rapport qualité/prix si tu veux investir.</div>
       </div>
       <!-- Nemotron Super — Gratuit -->
       <div class="mc" id="m-nem" onclick="selModel('nvidia/nemotron-3-super-120b-a12b:free','m-nem')">
@@ -503,7 +503,23 @@ if(/Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(navigator.userAgent)){
   </div>
 
   <div class="card">
-    <div class="card-title" data-i18n="extraTitle">🧩 Installer d'autres IA (optionnel)</div>
+    <!-- ====== INFO OPENROUTER ====== -->
+  <div class="box-info" style="margin-bottom:1rem">
+    <strong data-i18n="orHowTitle">ℹ Comment fonctionne OpenRouter</strong><br>
+    <span data-i18n="orHowText">OpenRouter est un service qui te donne accès à des dizaines d'IA avec une seule clé. Les modèles avec le suffixe <code style="background:var(--bg);color:var(--accent);padding:1px 4px">:free</code> sont gratuits, mais nécessitent un minimum de 5€ de crédit sur ton compte. Sans crédit, aucune IA ne fonctionnera.</span>
+  </div>
+
+  <div class="box-warn" style="margin-bottom:1rem">
+    <div class="box-warn-title" data-i18n="orLimitsTitle">⚠ Limites importantes à connaître</div>
+    <div style="font-size:12px;line-height:1.8;color:#ffddaa">
+      <span data-i18n="orLimits1">• <strong>Modèles gratuits</strong> : 50 requêtes/jour si moins de 10 crédits achetés, 1000/jour au-delà.</span><br>
+      <span data-i18n="orLimits2">• <strong>Modèles payants</strong> : facturés au nombre de tokens générés. Surveille ton solde.</span><br>
+      <span data-i18n="orLimits3">• <strong>Fallback automatique</strong> : si un modèle gratuit est saturé, OpenRouter peut te basculer sur un modèle payant sans préavis.</span><br>
+      <span data-i18n="orLimits4">• <strong>Conseil</strong> : définis une limite de dépense dans ton compte OpenRouter (Settings → Spending Limit) pour éviter les surprises.</span>
+    </div>
+  </div>
+
+  <div class="card-title" data-i18n="extraTitle">🧩 Installer d'autres IA (optionnel)</div>
     <div class="card-sub" data-i18n="extraSub">Catalogue complet d'OpenRouter (des centaines de modèles), avec la <strong style="color:var(--accent)">même clé</strong>. Cherche, filtre, trie, et coche autant d'IA que tu veux — à chaque lancement, un petit menu te proposera de choisir laquelle utiliser.</div>
 
     <div class="or-defaults">
@@ -999,7 +1015,7 @@ if(/Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(navigator.userAgent)){
    ============================================================ */
 var S = {
   key:  localStorage.getItem('cc_key')  || '',
-  model: localStorage.getItem('cc_model') || 'deepseek/deepseek-v4-flash',
+  model: localStorage.getItem('cc_model') || 'nvidia/nemotron-3-ultra-550b-a55b:free',
   extraModels: JSON.parse(localStorage.getItem('cc_extra') || '[]'),
   defaultFree: localStorage.getItem('cc_default_free') || '',
   defaultPaid: localStorage.getItem('cc_default_paid') || '',
