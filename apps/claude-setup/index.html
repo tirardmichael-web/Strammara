@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Gratuit — Installation Automatique</title>
+<script src="translations.js"></script>
+<script>
+// Système de traduction
+let currentLang = localStorage.getItem('cc_lang') || 'en';
+
+function t(key) {
+  const trans = TRADUCTIONS[currentLang];
+  return trans && trans[key] !== undefined ? trans[key] : (TRADUCTIONS.en[key] || key);
+}
+
+function changeLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('cc_lang', lang);
+  
+  // Traduire les data-i18n
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.innerHTML = t(key);
+  });
+  
+  // Traduire les placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    el.placeholder = t(key);
+  });
+  
+  // Mettre à jour les langues actives
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+  
+  // Sauvegarder pour la page config
+  if (typeof refreshExtraGrid === 'function') refreshExtraGrid();
+}
+</script>
+<style>
+/* ---------- SÉLECTEUR DE LANGUE ---------- */
+.lang-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 8px 0;
+  margin-bottom: 4px;
+}
+.lang-btn {
+  width: 36px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.15s;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: center;
+  background: transparent;
+  padding: 0;
+}
+.lang-btn:hover { opacity: 0.8; }
+.lang-btn.active { opacity: 1; border-color: var(--accent); box-shadow: 0 0 6px rgba(0,255,136,0.3); }
+.lang-btn img { width: 24px; height: 16px; vertical-align: middle; border-radius: 2px; }
+</style>
+
+<!-- ============================================================
+     CSS STRUCTURÉ — Design Dark Signé STRAMM-FUSION
+     ============================================================ -->
+<style>
+/* ---------- RESET & VARIABLES ---------- */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f0f;--surface:#1a1a1a;--panel:#222;--border:#2e2e2e;
+  --accent:#00ff88;--accent2:#0066ff;--text:#f0f0f0;--muted:#777;
+  --warn:#ffaa00;--err:#ff4444;--info:#88bbff;--gold:#ffd700
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-serif}
+.app{max-width:720px;margin:0 auto;padding:2rem 1.2rem 4rem}
+
+/* ---------- HEADER ---------- */
+.header{text-align:center;padding-bottom:1.5rem;margin-bottom:2rem;border-bottom:1px solid var(--border)}
+.badge{background:var(--accent);color:#000;font-size:9px;font-weight:700;padding:3px 10px;letter-spacing:2px;display:inline-block;margin-bottom:12px;font-family:'Courier New',monospace}
+h1{font-size:22px;font-weight:700;margin-bottom:8px}
+h1 span{color:var(--accent)}
+.tagline{font-size:13px;color:var(--muted);line-height:1.6}
+.tagline strong{color:var(--accent)}
+
+/* ---------- ONGLETS ---------- */
+.tabs{display:flex;gap:0;margin-bottom:2rem;border:1px solid var(--border);overflow-x:auto}
+.tab{flex:1;min-width:80px;padding:12px 6px;text-align:center;font-size:10px;color:var(--muted);cursor:pointer;border-right:1px solid var(--border);background:var(--surface);transition:all .15s;line-height:1.4;white-space:nowrap}
+.tab:last-child{border-right:none}
+.tab.active{background:var(--accent);color:#000;font-weight:700}
+.tab.done{color:var(--accent);background:var(--panel)}
+.tab.locked{opacity:.3;cursor:not-allowed}
+.tab-num{font-size:14px;font-weight:700;display:block;margin-bottom:2px}
+.tab:not(.locked):not(.active):hover{background:var(--panel);color:var(--text)}
+
+/* ---------- ÉCRANS ---------- */
+.screen{display:none}.screen.active{display:block}
+
+/* ---------- CARTES ---------- */
+.card{background:var(--surface);border:1px solid var(--border);padding:1.4rem;margin-bottom:1rem}
+.card-title{font-size:14px;font-weight:700;margin-bottom:6px}
+.card-sub{font-size:12px;color:var(--muted);margin-bottom:1.2rem;line-height:1.6}
+
+/* ---------- ÉTAPES ---------- */
+.steps{display:flex;flex-direction:column;gap:10px;margin-bottom:1.2rem}
+.si{display:flex;align-items:flex-start;gap:10px}
+.sn{background:var(--accent);color:#000;font-weight:700;font-size:11px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.st{font-size:12px;line-height:1.7;color:var(--text)}
+.st strong{color:var(--accent)}
+.st em{color:var(--muted);font-style:normal;font-size:11px}
+
+/* ---------- INPUTS ---------- */
+input[type=text],input[type=password]{
+  background:var(--bg);border:1px solid var(--border);color:var(--text);
+  font-family:'Courier New',monospace;font-size:12px;padding:11px 13px;
+  width:100%;outline:none;transition:border-color .15s
+}
+input:focus{border-color:var(--accent)}
+.row{display:flex;gap:8px;margin-bottom:8px}
+.row input{flex:1}
+
+/* ---------- STATUS ---------- */
+.kstatus{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--panel);margin-bottom:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0}
+.dot.ok{background:var(--accent)}.dot.err{background:var(--err)}.dot.warn{background:var(--warn)}
+.stxt{font-size:12px}
+
+/* ---------- BOUTONS ---------- */
+.btn{border:none;font-weight:700;font-size:12px;padding:10px 16px;cursor:pointer;transition:all .15s;letter-spacing:.5px}
+.btn:hover{opacity:.88}.btn:active{transform:scale(.97)}
+.btn-green{background:var(--accent);color:#000}
+.btn-blue{background:var(--accent2);color:#fff}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:11px}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-warn{background:var(--warn);color:#000}
+.btn-full{width:100%;padding:14px;font-size:13px;margin-top:6px}
+.btn:disabled{opacity:.3;cursor:not-allowed;pointer-events:none}
+.btn-sm{font-size:10px;padding:7px 12px}
+
+/* ---------- GRILLE MODÈLES ---------- */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+.mc{background:var(--panel);border:2px solid var(--border);padding:12px;cursor:pointer;transition:all .15s;position:relative}
+.mc:hover{border-color:var(--accent)}
+.mc.sel{border-color:var(--accent);background:#001a0d}
+.mc.sel::after{content:'✓';position:absolute;top:8px;right:10px;color:var(--accent);font-size:13px;font-weight:700}
+.mc.sel.reco{border-color:var(--gold);background:#1a1a00}
+.mc.sel.reco::after{content:'★';color:var(--gold);font-size:15px}
+.mc-tag{font-size:8px;letter-spacing:1px;margin-bottom:4px;font-family:'Courier New',monospace;min-height:12px}
+.mc-name{font-size:13px;font-weight:700;margin-bottom:2px}
+.mc-ctx{font-size:10px;color:var(--accent);margin-bottom:2px}
+.mc-desc{font-size:10px;color:var(--muted);line-height:1.4}
+
+/* ---------- BOÎTES INFO ---------- */
+.box-warn{background:#1a0f00;border:1px solid var(--warn);padding:1rem 1.2rem;margin:1rem 0}
+.box-warn-title{font-size:12px;font-weight:700;color:var(--warn);margin-bottom:8px}
+.box-ok{background:#001a0d;border:1px solid var(--accent);padding:1.1rem;display:none;margin-top:1rem}
+.box-ok.vis{display:block}
+.box-ok-title{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:10px}
+.box-info{background:#001020;border-left:3px solid var(--info);padding:10px 14px;font-size:12px;color:var(--info);margin:1rem 0;line-height:1.7}
+.box-tip{background:#1a1a00;border-left:3px solid var(--gold);padding:10px 14px;font-size:12px;color:#ffeeaa;margin:1rem 0;line-height:1.7}
+.box-err{background:#1a0000;border-left:3px solid var(--err);padding:10px 14px;font-size:12px;color:#ffaaaa;margin:.6rem 0;line-height:1.7;cursor:pointer}
+.box-err summary{font-weight:700;color:var(--err);cursor:pointer;list-style:none;padding:2px 0}
+.box-err summary::before{content:'▶ ';font-size:10px}
+details[open] .box-err summary::before{content:'▼ '}
+.box-err p{margin-top:8px;color:#ffcccc}
+.box-err code{background:#2a0000;padding:2px 6px;font-family:'Courier New',monospace;font-size:11px;border-radius:3px;color:var(--warn);display:inline-block;margin:2px 0}
+
+/* ---------- TABLEAU RÉCAP ---------- */
+.sumtable{background:var(--panel);border-left:3px solid var(--accent);padding:.9rem 1.1rem;margin-bottom:1rem}
+.sumrow{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}
+.sumrow:last-child{border-bottom:none}
+.sk{color:var(--muted)}.sv{color:var(--accent);font-weight:700;max-width:60%;text-align:right;word-break:break-all}
+
+/* ---------- CONFIG ---------- */
+.cfg-card{background:var(--panel);border:1px solid var(--border);padding:1rem;margin-bottom:10px}
+.cfg-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px}
+.cfg-title{font-size:12px;font-weight:700}
+.cfg-val{font-size:10px;color:var(--accent);font-family:monospace;max-width:55%;text-align:right;word-break:break-all}
+.mgrid-mini{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+
+/* ---------- LIGNES DÉTAILLÉES CATALOGUE OPENROUTER ---------- */
+.or-head{display:flex;gap:10px;padding:0 10px 6px;font-size:9px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;font-family:'Courier New',monospace}
+.or-head .or-h-name{flex:1;min-width:0}
+.or-head .or-h-col{width:64px;text-align:right;flex-shrink:0}
+.or-head .or-h-link{width:20px;flex-shrink:0}
+.or-row{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);padding:8px 10px;margin-bottom:6px;cursor:pointer;transition:all .15s}
+.or-row:hover{border-color:var(--accent)}
+.or-row.sel{border-color:var(--accent);background:#001a0d}
+.or-row .or-check{width:14px;flex-shrink:0;text-align:center;color:var(--accent);font-size:12px;font-weight:700}
+.or-row .or-name{flex:1;min-width:0}
+.or-row .or-name-txt{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.or-row .or-id-txt{font-size:9px;color:var(--muted);font-family:'Courier New',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.or-row .or-col{width:64px;flex-shrink:0;text-align:right;font-size:10px;font-family:'Courier New',monospace;color:var(--text)}
+.or-row .or-col.free{color:var(--accent);font-weight:700}
+.or-row .or-link{width:20px;flex-shrink:0;text-align:center;color:var(--muted);font-size:12px;text-decoration:none}
+.or-row .or-link:hover{color:var(--info)}
+.or-note{font-size:10px;color:var(--muted);line-height:1.6;margin:6px 0 10px;padding:8px 10px;background:var(--panel);border-left:3px solid var(--muted)}
+.or-warn-price{font-size:10px;color:#ffeeaa;line-height:1.6;margin:0 0 10px;padding:8px 10px;background:#1a1a00;border-left:3px solid var(--gold)}
+.or-defaults{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.or-default-box{flex:1;min-width:200px;background:var(--panel);border-left:3px solid var(--gold);padding:8px 12px;font-size:11px;line-height:1.6}
+.or-default-box .odl{color:var(--muted);display:block;margin-bottom:2px}
+.or-default-box .odv{color:var(--gold);font-weight:700;font-size:12px;word-break:break-all}
+.or-controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.or-controls select{background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:11px;padding:9px 10px;flex:1;min-width:130px;font-family:inherit;outline:none}
+.or-controls select:focus{border-color:var(--accent)}
+.or-sliders{display:flex;flex-direction:column;gap:12px;margin-bottom:12px;background:var(--panel);padding:12px;border:1px solid var(--border)}
+.or-slider-row{display:flex;flex-direction:column;gap:5px}
+.or-slider-row .osl-lbl{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);letter-spacing:.3px}
+.or-slider-row .osl-lbl b{color:var(--accent);font-weight:700}
+.or-slider-row input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
+.or-head .or-h-def{width:30px;flex-shrink:0}
+.or-row .or-def-btn{width:30px;flex-shrink:0;text-align:center;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:11px;padding:4px 0;cursor:pointer;line-height:1}
+.or-row .or-def-btn.active{border-color:var(--gold);color:var(--gold);background:#1a1a00}
+.or-row .or-def-btn:hover{border-color:var(--accent);color:var(--accent)}
+.mmc{background:var(--bg);border:1px solid var(--border);padding:8px;cursor:pointer;transition:all .15s;position:relative}
+.mmc:hover{border-color:var(--accent)}
+.mmc.sel{border-color:var(--accent);background:#001a0d}
+.mmc.sel::after{content:'✓';position:absolute;top:4px;right:6px;color:var(--accent);font-size:10px}
+.mmc-name{font-size:11px;font-weight:700;margin-bottom:2px}
+.mmc-tag{font-size:10px;color:var(--muted)}
+.regen-box{background:#001020;border:1px solid var(--accent2);padding:1rem;margin-top:10px;display:none}
+.regen-box.vis{display:block}
+
+/* ---------- DÉTAIL MODÈLE ---------- */
+.model-detail{background:#001a0d;border:1px solid var(--accent);padding:.8rem 1rem;margin-top:8px;display:none}
+.model-detail.vis{display:block}
+.model-detail p{font-size:11px;line-height:1.7;color:#aaffcc}
+
+/* ---------- MODAL ---------- */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center;z-index:999;padding:20px}
+.modal-overlay.vis{display:flex}
+.modal-box{background:var(--surface);border:1px solid var(--warn);max-width:440px;width:100%;padding:1.4rem;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:14px;font-weight:700;margin-bottom:12px;color:var(--warn)}
+.modal-actions{display:flex;gap:8px;margin-top:14px}
+
+/* ---------- ALERTE ANIMÉE ---------- */
+@keyframes pulseWarn{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,170,0,.55)}
+  50%{box-shadow:0 0 0 9px rgba(255,170,0,0)}
+}
+.box-warn-pulse{animation:pulseWarn 1.8s ease-in-out infinite;border:1px solid var(--warn)}
+
+/* ---------- GUIDE /MODEL ---------- */
+.guide-card{border:1px solid var(--gold);background:var(--panel);padding:1rem;margin-bottom:1rem}
+.guide-card h4{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:8px}
+.guide-card .step-list{padding-left:18px;font-size:12px;line-height:2;color:var(--text)}
+.guide-card .step-list li::marker{color:var(--gold);font-weight:700}
+.guide-card code{font-family:'Courier New',monospace;font-size:12px;color:var(--warn);background:var(--bg);padding:2px 6px;border-radius:3px}
+.guide-card .callout{background:var(--bg);border-left:3px solid var(--gold);padding:8px 12px;margin:8px 0;font-size:11px;line-height:1.6;color:var(--muted)}
+
+/* ---------- COMMANDE / DÉTAIL ---------- */
+.model-cmd{background:var(--panel);border:1px solid var(--border);padding:1rem;margin:.8rem 0}
+.model-cmd h4{font-size:12px;font-weight:700;margin-bottom:6px;color:var(--accent)}
+.model-cmd code{font-family:'Courier New',monospace;font-size:12px;color:var(--warn);background:var(--bg);padding:4px 8px;display:block;margin:4px 0}
+.model-cmd p{font-size:11px;color:var(--muted);line-height:1.6;margin-top:4px}
+
+/* ---------- EN-TÊTE ERREURS ---------- */
+.err-section{margin-top:1.5rem}
+.err-section h3{font-size:13px;font-weight:700;color:var(--warn);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+/* ---------- SPINNER ---------- */
+.spin{display:inline-block;width:10px;height:10px;border:2px solid var(--accent);border-top-color:transparent;border-radius:50%;animation:sp .6s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:500px){
+  .mgrid,.mgrid-mini{grid-template-columns:1fr}
+  .tabs{flex-wrap:wrap}
+  .tab{min-width:50%;border-bottom:1px solid var(--border)}
+}
+
+/* ---------- FOOTER ---------- */
+.footer{margin-top:3rem;border-top:1px solid var(--border);padding-top:1rem;display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:'Courier New',monospace}
+.fa{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="app">
+<!-- ====== SÉLECTEUR DE LANGUE ====== -->
+<div class="lang-bar">
+  <button class="lang-btn active" data-lang="en" onclick="changeLang('en')" title="English">🇬🇧</button>
+  <button class="lang-btn" data-lang="fr" onclick="changeLang('fr')" title="Français">🇫🇷</button>
+  <button class="lang-btn" data-lang="es" onclick="changeLang('es')" title="Español">🇪🇸</button>
+  <button class="lang-btn" data-lang="pt" onclick="changeLang('pt')" title="Português">🇵🇹</button>
+</div>
+<script>changeLang(currentLang);</script>
+
+<!-- ====== HEADER ====== -->
+<div class="header">
+  <span class="badge" data-i18n="badge">100% GRATUIT · V2</span>
+  <h1><span data-i18n="title">Claude Code</span> <span data-i18n="subtitle">Gratuit</span></h1>
+  <p class="tagline" data-i18n="tagline">Installe ton IA de code gratuitement sur Windows en 3 étapes.<br><strong>Aucune connaissance technique requise.</strong></p>
+</div>
+
+<!-- ====== ONGLETS ====== -->
+<div class="tabs">
+  <div class="tab active" id="tab-1" onclick="goTab(1)"><span class="tab-num">①</span><span data-i18n="tab1">Ma clé</span></div>
+  <div class="tab locked" id="tab-2" onclick="goTab(2)"><span class="tab-num">②</span><span data-i18n="tab2">Mon IA</span></div>
+  <div class="tab locked" id="tab-3" onclick="goTab(3)"><span class="tab-num">③</span><span data-i18n="tab3">Installer</span></div>
+  <div class="tab" id="tab-4" onclick="goTab(4)"><span class="tab-num">⚙</span><span data-i18n="tabConfig">Modifier</span></div>
+  <div class="tab" id="tab-5" onclick="goTab(5)"><span class="tab-num">?</span><span data-i18n="tabHelp">Aide</span></div>
+</div>
+
+<!-- ====== ÉCRAN 1 : CLÉ API ====== -->
+<div class="screen active" id="sc-1">
+
+  <div class="card">
+    <div class="card-title">🔑 Obtenir ta clé d'accès gratuite</div>
+    <div class="card-sub">OpenRouter te donne accès à des dizaines d'IA avec une seule clé. Gratuit, sans carte bancaire — <strong style="color:var(--warn)">mais ça ne fonctionne pas avec Claude Code tant qu'il n'y a pas un minimum de crédit sur ton compte</strong> (voir ci-dessous).</div>
+
+    <div class="box-warn box-warn-pulse">
+      <div class="box-warn-title">⚠ IMPORTANT — Crédit minimum obligatoire</div>
+      <p style="font-size:12px;line-height:1.7;color:#ffddaa">
+        Sans <strong style="color:var(--warn)">crédit sur ton compte OpenRouter</strong>, Claude Code ne pourra utiliser <strong>aucune IA</strong> — même les modèles gratuits (<code style="background:var(--bg);color:var(--warn);font-family:'Courier New',monospace;padding:1px 5px">:free</code>) en ont besoin pour fonctionner correctement. Prévois au moins <strong style="color:var(--accent)">5€ de crédit</strong> sur <a href="https://openrouter.ai/credits" target="_blank" rel="noopener" style="color:var(--accent)">openrouter.ai/credits</a> avant de continuer.
+      </p>
+    </div>
+
+    <div class="steps">
+      <div class="si"><div class="sn">1</div><div class="st">Clique sur le bouton bleu ci-dessous.<br><em>→ Le site OpenRouter s'ouvre dans un nouvel onglet</em></div></div>
+      <div class="si"><div class="sn">2</div><div class="st">Crée un compte : clique <strong>Sign in</strong> → <strong>Continue with Google</strong><br><em>→ C'est plus rapide avec Google</em></div></div>
+      <div class="si"><div class="sn">3</div><div class="st">Dans le menu de gauche, clique sur <strong>Keys</strong> → <strong>Create API key</strong><br><em>→ Donne-lui un nom (ex: "mon-ia") et clique Create</em></div></div>
+      <div class="si"><div class="sn">4</div><div class="st"><strong>Copie la clé</strong> qui apparaît (commence par <code style="background:var(--bg);color:var(--warn);font-family:'Courier New',monospace;padding:1px 5px">sk-or-v1-…</code>)<br><em>→ Elle n'est affichée qu'une seule fois — ne ferme pas la page avant !</em></div></div>
+    </div>
+    <button class="btn btn-blue btn-full" onclick="openOrModal()">👉 Ouvrir OpenRouter — créer ma clé gratuite</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Colle ta clé ici</div>
+    <div class="card-sub">Ta clé reste uniquement sur ton ordinateur. Elle est sauvegardée automatiquement.</div>
+    <div class="row">
+      <input type="password" id="api-key" placeholder="sk-or-v1-..."
+        oninput="onKeyInput()" onpaste="setTimeout(onKeyInput,50)"
+        autocomplete="off"/>
+      <button class="btn btn-ghost" onclick="toggleVis('api-key',this)">Afficher</button>
+    </div>
+    <div class="kstatus">
+      <div class="dot" id="k-dot"></div>
+      <span class="stxt" id="k-msg" style="color:var(--muted)">En attente de ta clé...</span>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+      <button class="btn btn-green" id="btn-test-key" onclick="testKey()" disabled style="flex:1">🔍 Tester ma clé</button>
+      <button class="btn btn-ghost" id="btn-skip-test" onclick="skipTest()" style="display:none;font-size:10px">Passer le test</button>
+    </div>
+    <button class="btn btn-green btn-full" id="btn-s1" onclick="next(1)" disabled>✓ Ma clé est prête — Étape suivante →</button>
+  </div>
+
+</div>
+
+<!-- ====== ÉCRAN 2 : CHOISIR SON IA ====== -->
+<div class="screen" id="sc-2">
+
+  <div class="card">
+    <div class="card-title">🤖 Choisir ton IA</div>
+    <div class="card-sub">Si une IA ne répond pas, essayes-en une autre — c'est facile à changer.</div>
+
+    <div class="box-info">
+      <strong>ℹ Comment ça marche</strong><br>
+      Les IA gratuites ont des limites (~20 requêtes/minute). Si une est surchargée, essaie-en une autre. Notre recommandée est <strong style="color:var(--gold)">DeepSeek V4 Flash</strong> — excellent rapport qualité/prix, parfait pour coder.
+    </div>
+
+    <p style="font-size:11px;color:var(--muted);margin:-6px 0 1.2rem">ℹ Un rappel sur les limites quotidiennes des IA gratuites et le crédit minimum ? <strong style="color:var(--accent);cursor:pointer" onclick="openOrModal()">Revoir l'info →</strong></p>
+
+    <div class="mgrid">
+      <!-- DeepSeek V4 Flash — Recommandé -->
+      <div class="mc reco sel" id="m-deepseek" onclick="selModel('deepseek/deepseek-v4-flash','m-deepseek')">
+        <div class="mc-tag" style="color:var(--gold)">★ RECOMMANDÉ</div>
+        <div class="mc-name">DeepSeek V4 Flash (Payant)</div>
+        <div class="mc-ctx">Contexte : 1M tokens</div>
+        <div class="mc-desc">Raisonnement puissant, excellent en code, 1M de contexte. Le meilleur rapport qualité/prix pour Claude Code.</div>
+      </div>
+      <!-- Nemotron Ultra — Gratuit -->
+      <div class="mc" id="m-ultra" onclick="selModel('nvidia/nemotron-3-ultra-550b-a55b:free','m-ultra')">
+        <div class="mc-tag" style="color:var(--accent)">GRATUIT</div>
+        <div class="mc-name">Nemotron 3 Ultra</div>
+        <div class="mc-ctx">Contexte : 1M tokens</div>
+        <div class="mc-desc">Modèle NVIDIA très grand (550B params), excellent en raisonnement et en code. Gratuit sur OpenRouter.</div>
+      </div>
+      <!-- Nemotron Super — Gratuit -->
+      <div class="mc" id="m-nem" onclick="selModel('nvidia/nemotron-3-super-120b-a12b:free','m-nem')">
+        <div class="mc-tag" style="color:var(--accent)">GRATUIT</div>
+        <div class="mc-name">Nemotron 3 Super</div>
+        <div class="mc-ctx">Contexte : 1M tokens</div>
+        <div class="mc-desc">Modèle NVIDIA hybride très efficace (120B params), rapide et gratuit. Excellent pour les tâches longues.</div>
+      </div>
+      <!-- Modèle personnalisé -->
+      <div class="mc" id="m-cust" onclick="focusCustom()">
+        <div class="mc-tag" style="color:var(--warn)">AVANCÉ</div>
+        <div class="mc-name">Autre modèle</div>
+        <div class="mc-ctx"></div>
+        <div class="mc-desc">Entrer l'identifiant exact d'un modèle OpenRouter toi-même.</div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-bottom:0">
+      <input type="text" id="custom-m" placeholder="ex: anthropic/claude-sonnet-4-6 (payant)" oninput="customM()"/>
+      <button class="btn btn-ghost" onclick="window.open('https://openrouter.ai/models?order=top-weekly&supported_parameters=tools','_blank')">Voir la liste</button>
+    </div>
+
+    <div class="model-detail" id="model-tip">
+      <p id="model-tip-text"></p>
+    </div>
+  </div>
+
+  <div class="box-tip">
+    💡 <strong>Astuce :</strong> Tu peux changer d'IA à tout moment dans Claude Code avec la commande <code style="background:var(--bg);color:var(--warn);font-family:'Courier New',monospace;padding:1px 5px">/model</code>. Voir l'onglet <strong style="color:var(--accent);cursor:pointer" onclick="goTab(5)">? Aide</strong> pour le guide complet en français.
+  </div>
+
+  <div class="card">
+    <div class="card-title">🧩 Installer d'autres IA (optionnel)</div>
+    <div class="card-sub">Catalogue complet d'OpenRouter (des centaines de modèles), avec la <strong style="color:var(--accent)">même clé</strong>. Cherche, filtre, trie, et coche autant d'IA que tu veux — à chaque lancement, un petit menu te proposera de choisir laquelle utiliser.</div>
+
+    <div class="or-defaults">
+      <div class="or-default-box">
+        <span class="odl">🆓 IA gratuite par défaut</span>
+        <span class="odv" id="or-default-free-name">—</span>
+      </div>
+      <div class="or-default-box">
+        <span class="odl">💰 IA payante par défaut</span>
+        <span class="odv" id="or-default-paid-name">—</span>
+      </div>
+    </div>
+    <p style="font-size:10px;color:var(--muted);line-height:1.6;margin:-4px 0 10px">On te propose déjà la plus puissante gratuite (le plus de contexte) et une payante solide. Clique sur 🆓 ou 💰 à côté d'un modèle dans la liste pour changer.</p>
+
+    <div class="row" style="margin-bottom:8px">
+      <input type="text" id="or-search" placeholder="Rechercher (ex: gemini, mistral, claude, vision...)" oninput="renderOrCatalog('or')"/>
+    </div>
+
+    <div class="or-controls">
+      <select id="or-freepaid" onchange="renderOrCatalog('or')">
+        <option value="all">Gratuit + Payant</option>
+        <option value="free">Gratuit uniquement</option>
+        <option value="paid">Payant uniquement</option>
+      </select>
+      <select id="or-cat" onchange="renderOrCatalog('or')">
+        <option value="all">Toutes catégories</option>
+        <option value="code">💻 Code</option>
+        <option value="reasoning">🧠 Raisonnement</option>
+        <option value="writing">✍️ Rédaction / SEO</option>
+        <option value="vision">👁 Vision / Multimodal</option>
+        <option value="fast">⚡ Rapide / Léger</option>
+        <option value="general">💬 Généraliste</option>
+      </select>
+      <select id="or-sort" onchange="renderOrCatalog('or')">
+        <option value="name">Trier : Nom (A-Z)</option>
+        <option value="ctx-desc">Trier : Contexte (le + grand)</option>
+        <option value="price-in-asc">Trier : Prix entrée (le - cher)</option>
+        <option value="price-out-asc">Trier : Prix sortie (le - cher)</option>
+        <option value="free-first">Trier : Gratuit d'abord</option>
+      </select>
+    </div>
+
+    <div class="or-sliders">
+      <div class="or-slider-row">
+        <span class="osl-lbl">Contexte minimum <b id="or-ctx-label">Aucun minimum</b></span>
+        <input type="range" id="or-ctx-slider" min="0" max="11" step="1" value="0" oninput="renderOrCatalog('or')"/>
+      </div>
+      <div class="or-slider-row">
+        <span class="osl-lbl">Prix d'entrée max ($/M tokens) <b id="or-price-in-label">Illimité</b></span>
+        <input type="range" id="or-price-in-slider" min="0" max="11" step="1" value="11" oninput="renderOrCatalog('or')"/>
+      </div>
+      <div class="or-slider-row">
+        <span class="osl-lbl">Prix de sortie max ($/M tokens) <b id="or-price-out-label">Illimité</b></span>
+        <input type="range" id="or-price-out-slider" min="0" max="11" step="1" value="11" oninput="renderOrCatalog('or')"/>
+      </div>
+    </div>
+
+    <div id="or-status" style="font-size:11px;color:var(--muted);margin-bottom:8px">Chargement du catalogue OpenRouter...</div>
+    <div class="or-head"><span class="or-h-name">Nom du modèle</span><span class="or-h-col">Contexte</span><span class="or-h-col">Saisir</span><span class="or-h-col">Sortir</span><span class="or-h-def"></span><span class="or-h-link"></span></div>
+    <div id="or-results" style="max-height:420px;overflow-y:auto"></div>
+    <div class="or-warn-price">⚠ <strong>Les prix affichés viennent de l'API OpenRouter au moment du chargement de la page — ils peuvent changer.</strong> Clique sur ↗ pour vérifier le tarif à jour directement sur la fiche du modèle avant une utilisation intensive.</div>
+    <div class="or-note">ℹ Jetons hebdomadaires, latence et débit ne sont pas fournis par l'API publique d'OpenRouter (uniquement affichés sur leur site). Les catégories sont une estimation basée sur le nom/la description du modèle. Clique sur ↗ à côté d'un modèle pour voir sa fiche complète avec ces stats en direct.</div>
+  </div>
+
+  <button class="btn btn-green btn-full" onclick="next(2)">✓ Cette IA me convient — Étape suivante →</button>
+</div>
+
+<!-- ====== ÉCRAN 3 : INSTALLATION ====== -->
+<div class="screen" id="sc-3">
+
+  <div class="card">
+    <div class="card-title">🚀 Tout est prêt — Lance l'installation !</div>
+    <div class="card-sub">Un fichier va être téléchargé. Il installe automatiquement tout ce dont tu as besoin.</div>
+
+    <div class="sumtable">
+      <div class="sumrow"><span class="sk">Ta clé OpenRouter</span><span class="sv" id="sum-key">—</span></div>
+      <div class="sumrow"><span class="sk">Ton IA choisie</span><span class="sv" id="sum-model">—</span></div>
+      <div class="sumrow"><span class="sk">Ce qui sera installé</span><span class="sv" id="sum-tools">À déterminer...</span></div>
+      <div class="sumrow"><span class="sk">Coût total</span><span class="sv" style="color:var(--accent)">100% GRATUIT</span></div>
+    </div>
+
+    <button class="btn btn-green btn-full" id="btn-gen" onclick="generateSetup()">⬇ Télécharger mon fichier d'installation</button>
+
+    <div class="box-ok" id="dl-ok">
+      <div class="box-ok-title">✓ Fichier téléchargé : Setup_Claude_Code.ps1</div>
+
+      <div class="box-warn">
+        <div class="box-warn-title">⚠ IMPORTANT — Débloquer le fichier avant de lancer</div>
+        <div class="steps">
+          <div class="si"><div class="sn" style="background:var(--warn)">1</div><div class="st">Ouvre ton dossier <strong style="color:var(--warn)">Téléchargements</strong></div></div>
+          <div class="si"><div class="sn" style="background:var(--warn)">2</div><div class="st"><strong style="color:var(--warn)">Clic droit</strong> sur <strong>Setup_Claude_Code.ps1</strong> → <strong style="color:var(--warn)">"Propriétés"</strong></div></div>
+          <div class="si"><div class="sn" style="background:var(--warn)">3</div><div class="st">En bas, coche <strong style="color:var(--warn)">"Débloquer"</strong> → clique <strong style="color:var(--warn)">OK</strong><br><em>→ Windows bloque les fichiers .ps1 téléchargés d'internet, cette étape est obligatoire</em></div></div>
+          <div class="si"><div class="sn" style="background:var(--warn)">4</div><div class="st">Pas de case "Débloquer" ? C'est déjà bon. Continue.</div></div>
+        </div>
+      </div>
+
+      <div class="card-title" style="margin:1rem 0 10px">▶ Lancer l'installation</div>
+      <div class="steps">
+        <div class="si"><div class="sn">1</div><div class="st"><strong>Clic droit</strong> sur <strong>Setup_Claude_Code.ps1</strong> → <strong>"Exécuter avec PowerShell"</strong><br><em>→ Une fenêtre noire s'ouvre</em></div></div>
+        <div class="si"><div class="sn">2</div><div class="st">Si Windows demande "Voulez-vous autoriser..." → clique <strong>Oui</strong><br><em>→ L'installation démarre (2 à 5 minutes selon ta connexion)</em></div></div>
+        <div class="si"><div class="sn">3</div><div class="st">Le script détecte ce que tu as déjà et n'installe que ce qui manque<br><em>→ Si tu as déjà VS Code ou Node.js, il passe directement</em></div></div>
+        <div class="si"><div class="sn">4</div><div class="st">À la fin, tu verras <strong style="color:var(--accent)">"INSTALLATION TERMINÉE"</strong> en vert<br><em>→ Le fichier Lancer Claude Code.ps1 est créé sur ton Bureau</em></div></div>
+      </div>
+
+      <div class="box-warn" style="margin-top:1rem">
+        <div class="box-warn-title">⚠ Ton antivirus bloque le fichier ?</div>
+        <div class="steps">
+          <div class="si"><div class="sn" style="background:var(--warn)">1</div><div class="st">Clique <strong style="color:var(--warn)">"Plus d'options"</strong> dans la popup de l'antivirus</div></div>
+          <div class="si"><div class="sn" style="background:var(--warn)">2</div><div class="st">Clique <strong style="color:var(--warn)">"Restaurer et ajouter une exception"</strong></div></div>
+          <div class="si"><div class="sn" style="background:var(--warn)">3</div><div class="st">Puis <strong style="color:var(--warn)">recommence à l'étape "Débloquer"</strong> ci-dessus</div></div>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:8px">C'est un faux positif fréquent sur les fichiers .ps1. Tu peux l'ouvrir avec le Bloc-notes pour vérifier — c'est du texte pur.</p>
+      </div>
+
+      <div class="card-title" style="margin:1.2rem 0 10px">▶ Utiliser ton IA chaque jour</div>
+      <div class="steps">
+        <div class="si"><div class="sn">1</div><div class="st">Sur ton Bureau, <strong>clic droit</strong> sur <strong>Lancer Claude Code.ps1</strong></div></div>
+        <div class="si"><div class="sn">2</div><div class="st"><strong>"Exécuter avec PowerShell"</strong> → VS Code s'ouvre, Claude Code démarre en bas</div></div>
+        <div class="si"><div class="sn">3</div><div class="st"><strong>Tape ton message</strong> — ton IA (<span id="launched-model">DeepSeek V4 Flash</span>) te répond !</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ====== ÉCRAN 4 : CONFIG/CHANGEMENT ====== -->
+<div class="screen" id="sc-4">
+
+  <div class="card">
+    <div class="card-title">⚙ Changer ma configuration</div>
+    <div class="card-sub">Nouvelle clé ou nouvelle IA ? Modifie ici et télécharge un nouveau lanceur sans tout réinstaller.</div>
+
+    <div class="cfg-card">
+      <div class="cfg-head">
+        <span class="cfg-title">🔑 Changer ma clé OpenRouter</span>
+        <span class="cfg-val" id="cfg-key-display">aucune clé active</span>
+      </div>
+      <div class="row">
+        <input type="password" id="cfg-key" placeholder="sk-or-v1-..."
+          oninput="onCfgKeyInput()" onpaste="setTimeout(onCfgKeyInput,50)"
+          autocomplete="off"/>
+        <button class="btn btn-ghost" onclick="toggleVis('cfg-key',this)">Afficher</button>
+      </div>
+      <div class="kstatus">
+        <div class="dot" id="ck-dot"></div>
+        <span class="stxt" id="ck-msg" style="color:var(--muted)">Nouvelle clé...</span>
+      </div>
+      <button class="btn btn-green" id="btn-cfg-key" onclick="applyNewKey()" disabled style="font-size:11px;padding:9px 16px">Appliquer cette clé</button>
+    </div>
+
+    <div class="cfg-card">
+      <div class="cfg-head">
+        <span class="cfg-title">🤖 Changer mon IA</span>
+        <span class="cfg-val" id="cfg-model-display">aucun modèle actif</span>
+      </div>
+      <div class="mgrid-mini">
+        <div class="mmc" id="cm-deepseek" onclick="selCfgModel('deepseek/deepseek-v4-flash','cm-deepseek')"><div class="mmc-name">DeepSeek V4 Flash</div><div class="mmc-tag">★ Recommandé · 1M ctx</div></div>
+        <div class="mmc" id="cm-qwen" onclick="selCfgModel('qwen/qwen3-coder:free','cm-qwen')"><div class="mmc-name">Qwen3 Coder</div><div class="mmc-tag">Expert code · 1M ctx</div></div>
+        <div class="mmc" id="cm-owl" onclick="selCfgModel('openrouter/owl-alpha','cm-owl')"><div class="mmc-name">Owl Alpha</div><div class="mmc-tag">Compatible CC · 1M ctx</div></div>
+        <div class="mmc" id="cm-laguna" onclick="selCfgModel('poolside/laguna-m.1:free','cm-laguna')"><div class="mmc-name">Laguna M.1</div><div class="mmc-tag">Expert code · 262K ctx</div></div>
+        <div class="mmc" id="cm-ultra" onclick="selCfgModel('nvidia/nemotron-3-ultra-550b-a55b:free','cm-ultra')"><div class="mmc-name">Nemotron Ultra</div><div class="mmc-tag">Nvidia · 1M ctx</div></div>
+        <div class="mmc" id="cm-nem" onclick="selCfgModel('nvidia/nemotron-3-super-120b-a12b:free','cm-nem')"><div class="mmc-name">Nemotron Super</div><div class="mmc-tag">Nvidia · 1M ctx</div></div>
+        <div class="mmc" id="cm-gptoss" onclick="selCfgModel('openai/gpt-oss-120b:free','cm-gptoss')"><div class="mmc-name">GPT-OSS 120B</div><div class="mmc-tag">OpenAI · 131K ctx</div></div>
+        <div class="mmc" id="cm-llama" onclick="selCfgModel('meta-llama/llama-3.3-70b-instruct:free','cm-llama')"><div class="mmc-name">Llama 3.3 70B</div><div class="mmc-tag">Meta · 128K ctx</div></div>
+        <div class="mmc" id="cm-gemma" onclick="selCfgModel('google/gemma-4-31b-it:free','cm-gemma')"><div class="mmc-name">Gemma 4 31B</div><div class="mmc-tag">Google · 262K ctx</div></div>
+        <div class="mmc" id="cm-cust" onclick="document.getElementById('cfg-custom-m').focus()"><div class="mmc-name">Autre modèle</div><div class="mmc-tag">Identifiant manuel</div></div>
+      </div>
+      <div class="row"><input type="text" id="cfg-custom-m" placeholder="Identifiant exact..." oninput="cfgCustomM()"/></div>
+      <button class="btn btn-warn" id="btn-cfg-model" onclick="applyNewModel()" disabled style="font-size:11px;padding:9px 16px">Appliquer ce choix</button>
+    </div>
+
+    <div class="cfg-card">
+      <div class="cfg-head">
+        <span class="cfg-title">🧩 Mes autres IA (catalogue complet)</span>
+      </div>
+      <div class="card-sub" style="margin-bottom:.8rem">Cherche, filtre, trie et coche/décoche les IA disponibles dans le menu de démarrage. Pris en compte tout de suite — pense à retélécharger le lanceur en bas.</div>
+
+      <div class="or-defaults">
+        <div class="or-default-box">
+          <span class="odl">🆓 IA gratuite par défaut</span>
+          <span class="odv" id="orc-default-free-name">—</span>
+        </div>
+        <div class="or-default-box">
+          <span class="odl">💰 IA payante par défaut</span>
+          <span class="odv" id="orc-default-paid-name">—</span>
+        </div>
+      </div>
+
+      <div class="row" style="margin-bottom:8px">
+        <input type="text" id="orc-search" placeholder="Rechercher (ex: gemini, mistral, claude, vision...)" oninput="renderOrCatalog('orc')"/>
+      </div>
+
+      <div class="or-controls">
+        <select id="orc-freepaid" onchange="renderOrCatalog('orc')">
+          <option value="all">Gratuit + Payant</option>
+          <option value="free">Gratuit uniquement</option>
+          <option value="paid">Payant uniquement</option>
+        </select>
+        <select id="orc-cat" onchange="renderOrCatalog('orc')">
+          <option value="all">Toutes catégories</option>
+          <option value="code">💻 Code</option>
+          <option value="reasoning">🧠 Raisonnement</option>
+          <option value="writing">✍️ Rédaction / SEO</option>
+          <option value="vision">👁 Vision / Multimodal</option>
+          <option value="fast">⚡ Rapide / Léger</option>
+          <option value="general">💬 Généraliste</option>
+        </select>
+        <select id="orc-sort" onchange="renderOrCatalog('orc')">
+          <option value="name">Trier : Nom (A-Z)</option>
+          <option value="ctx-desc">Trier : Contexte (le + grand)</option>
+          <option value="price-in-asc">Trier : Prix entrée (le - cher)</option>
+          <option value="price-out-asc">Trier : Prix sortie (le - cher)</option>
+          <option value="free-first">Trier : Gratuit d'abord</option>
+        </select>
+      </div>
+
+      <div class="or-sliders">
+        <div class="or-slider-row">
+          <span class="osl-lbl">Contexte minimum <b id="orc-ctx-label">Aucun minimum</b></span>
+          <input type="range" id="orc-ctx-slider" min="0" max="11" step="1" value="0" oninput="renderOrCatalog('orc')"/>
+        </div>
+        <div class="or-slider-row">
+          <span class="osl-lbl">Prix d'entrée max ($/M tokens) <b id="orc-price-in-label">Illimité</b></span>
+          <input type="range" id="orc-price-in-slider" min="0" max="11" step="1" value="11" oninput="renderOrCatalog('orc')"/>
+        </div>
+        <div class="or-slider-row">
+          <span class="osl-lbl">Prix de sortie max ($/M tokens) <b id="orc-price-out-label">Illimité</b></span>
+          <input type="range" id="orc-price-out-slider" min="0" max="11" step="1" value="11" oninput="renderOrCatalog('orc')"/>
+        </div>
+      </div>
+
+      <div id="orc-status" style="font-size:11px;color:var(--muted);margin-bottom:8px">Chargement du catalogue OpenRouter...</div>
+      <div class="or-head"><span class="or-h-name">Nom du modèle</span><span class="or-h-col">Contexte</span><span class="or-h-col">Saisir</span><span class="or-h-col">Sortir</span><span class="or-h-def"></span><span class="or-h-link"></span></div>
+      <div id="orc-results" style="max-height:420px;overflow-y:auto"></div>
+      <div class="or-warn-price">⚠ <strong>Les prix viennent de l'API OpenRouter au chargement de la page — ils peuvent changer.</strong> Vérifie toujours le tarif à jour via le lien ↗.</div>
+      <div class="or-note">ℹ Jetons hebdomadaires, latence et débit ne sont pas fournis par l'API publique d'OpenRouter. Catégories estimées d'après le nom/la description. Clique sur ↗ pour voir la fiche complète du modèle.</div>
+      <p style="font-size:11px;color:var(--gold);line-height:1.6;margin-top:6px">⬇ Chaque ajout/retrait ci-dessus fait apparaître le bouton <strong>"Télécharger le nouveau lanceur"</strong> juste en dessous — pense à le retélécharger et à remplacer le fichier sur ton Bureau, sinon tes nouvelles IA ne seront pas disponibles au démarrage.</p>
+    </div>
+
+    <div class="regen-box" id="regen-box">
+      <div class="cfg-title" style="margin-bottom:10px;color:var(--accent)">Télécharger mon nouveau lanceur</div>
+      <div class="sumtable" style="margin-bottom:10px">
+        <div class="sumrow"><span class="sk">Clé</span><span class="sv" id="regen-key">—</span></div>
+        <div class="sumrow"><span class="sk">IA</span><span class="sv" id="regen-model">—</span></div>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.7">
+        Télécharge un nouveau <strong style="color:var(--accent)">Lancer Claude Code.ps1</strong>. Remplace l'ancien fichier sur ton Bureau — clic droit → Propriétés → Débloquer si nécessaire.
+      </p>
+      <button class="btn btn-green btn-full" onclick="regenLauncher()" style="margin-top:0">⬇ Télécharger le nouveau lanceur</button>
+      <div class="box-ok" id="regen-ok" style="margin-top:10px">
+        <div class="box-ok-title">✓ Nouveau lanceur téléchargé</div>
+        <div class="steps" style="margin-top:8px">
+          <div class="si"><div class="sn">1</div><div class="st">Copie <strong>Lancer Claude Code.ps1</strong> sur ton Bureau (remplace l'ancien)</div></div>
+          <div class="si"><div class="sn">2</div><div class="st"><strong>Clic droit</strong> → <strong>Propriétés</strong> → coche <strong>Débloquer</strong> si visible → OK</div></div>
+          <div class="si"><div class="sn">3</div><div class="st"><strong>Clic droit</strong> → <strong>Exécuter avec PowerShell</strong> → ta nouvelle IA démarre</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ====== ÉCRAN 5 : AIDE ====== -->
+<div class="screen" id="sc-5">
+
+  <!-- GUIDE /MODEL COMPLET EN FRANÇAIS -->
+  <div class="card" style="border-color:var(--gold)">
+    <div class="card-title" style="color:var(--gold)">🎯 Comment utiliser /model pour changer d'IA</div>
+    <div class="card-sub">Le guide pas-à-pas pour les débutants qui ne parlent pas anglais.</div>
+
+    <div class="guide-card">
+      <h4>📌 Nouveau : le menu de démarrage multi-IA</h4>
+      <p style="font-size:12px;line-height:1.7;color:var(--muted)">
+        Si tu as installé plusieurs IA (onglet <strong style="color:var(--gold)">① Ma clé / ② Mon IA</strong> ou <strong style="color:var(--gold)">⚙ Modifier</strong>), <strong>Lancer Claude Code.ps1</strong> affiche maintenant un petit menu numéroté à chaque démarrage. Tape le numéro de l'IA que tu veux, ou appuie directement sur <strong>Entrée</strong> pour utiliser ton IA par défaut. Toutes ces IA utilisent <strong style="color:var(--accent)">la même clé OpenRouter</strong> — pas besoin d'en recréer une.
+      </p>
+    </div>
+
+    <div class="guide-card">
+      <h4>📌 Pourquoi changer d'IA ?</h4>
+      <p style="font-size:12px;line-height:1.7;color:var(--muted)">
+        Si ton IA actuelle est lente, surchargée ou ne répond plus, tu peux en essayer une autre gratuitement. C'est normal sur les IA gratuites — elles sont parfois saturées le soir.
+      </p>
+    </div>
+
+    <div class="guide-card">
+      <h4>📌 Commande /model — Le pas-à-pas</h4>
+      <ol class="step-list">
+        <li>Dans Claude Code, <strong>tape</strong> <code>/model</code> et appuie sur <strong>Entrée</strong></li>
+        <li>Une liste apparaît avec des numéros de <strong>1 à 6</strong></li>
+        <li><strong>Ignore les options 1 à 5</strong> — ce sont les IA payantes d'Anthropic (Claude Opus, Sonnet, etc.)</li>
+        <li>Descends jusqu'à l'<strong>option 6</strong> qui s'appelle <strong>"Custom model"</strong> (modèle personnalisé)</li>
+        <li>Appuie sur <strong>Entrée</strong> pour sélectionner l'option 6</li>
+        <li>La console te demande : <em>"Enter custom model ID:"</em></li>
+        <li>Tape l'identifiant exact de ton IA, par exemple :<br>
+          <code>deepseek/deepseek-v4-flash</code> (DeepSeek V4)<br>
+          <code>qwen/qwen3-coder:free</code> (Qwen3 Coder)<br>
+          <code>meta-llama/llama-3.3-70b-instruct:free</code> (Llama 3.3)</li>
+        <li>Appuie sur <strong>Entrée</strong> une fois que tu as tapé l'identifiant</li>
+        <li>Claude Code va te demander si tu veux en faire ton modèle <strong>par défaut</strong> (toujours celui-là) ou juste <strong>pour cette session</strong> (une fois). Choisis "par défaut" si tu l'aimes bien.</li>
+      </ol>
+      <div class="callout">
+        💡 <strong>Raccourci :</strong> Tu peux aussi taper directement <code>/model deepseek/deepseek-v4-flash</code> en une seule fois, ça va plus vite !
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <h4>📌 Que signifient les options 1 à 5 ?</h4>
+      <div style="font-size:11px;color:var(--muted);line-height:1.8">
+        Les options <strong>1 à 5</strong> correspondent aux modèles <strong>Claude Anthropic</strong> (Opus, Sonnet, Haiku...).<br>
+        Ce sont les versions officielles de Claude, <strong>payantes</strong> (Anthropic facture à l'usage).<br>
+        L'option <strong>6 "Custom model"</strong> est celle qui utilise ta clé OpenRouter — donc <strong>gratuite</strong>.<br>
+        Ne t'inquiète pas si tu vois des noms anglais dans la liste, le fonctionnement est simple.
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMANDES CLAUDE CODE -->
+  <div class="card">
+    <div class="card-title">📖 Toutes les commandes utiles de Claude Code</div>
+    <div class="card-sub">Les commandes essentielles expliquées en français.</div>
+
+    <div class="model-cmd">
+      <h4>/model — Changer d'IA</h4>
+      <code>/model</code>
+      <p>Affiche la liste des IA. Utilise les flèches <strong>↑ ↓</strong> pour naviguer. Sélectionne l'option 6 pour ton IA gratuite OpenRouter. Tu peux aussi taper <code>/model deepseek/deepseek-v4-flash</code> directement.</p>
+    </div>
+
+    <div class="model-cmd">
+      <h4>/logout — Se déconnecter</h4>
+      <code>/logout</code>
+      <p>À utiliser si Claude Code te demande de te connecter à un compte Anthropic. Cette commande efface le cache et permet d'utiliser OpenRouter.</p>
+    </div>
+
+    <div class="model-cmd">
+      <h4>/clear — Effacer la conversation</h4>
+      <code>/clear</code>
+      <p>Efface tout l'historique de ta discussion. Utile si la conversation devient longue ou si ton IA commence à ralentir. <strong>C'est la commande la plus utile au quotidien.</strong></p>
+    </div>
+
+    <div class="model-cmd">
+      <h4>/help — Aide complète (en anglais)</h4>
+      <code>/help</code>
+      <p>Affiche toutes les commandes disponibles. C'est en anglais mais les commandes sont simples : <strong>/init</strong> (analyser ton projet), <strong>/status</strong> (voir l'état), <strong>/add</strong> (ajouter un fichier).</p>
+    </div>
+
+    <div class="model-cmd">
+      <h4>/init — Analyser ton projet</h4>
+      <code>/init</code>
+      <p>Demande à Claude Code d'analyser ton projet et de comprendre son architecture. Utile quand tu commences à travailler sur un dossier existant.</p>
+    </div>
+
+    <div class="model-cmd">
+      <h4>💬 Parler à ton IA</h4>
+      <code>Tape ton message et appuie sur Entrée</code>
+      <p>Tu peux lui demander en français de : créer des fichiers, modifier du code, expliquer des erreurs, créer un site web, etc. Les IA gratuites comprennent très bien le français.</p>
+    </div>
+  </div>
+
+  <!-- SECTION ERREURS -->
+  <div class="err-section">
+    <h3>🔧 Messages d'erreur expliqués (clique pour voir la solution)</h3>
+
+    <div class="card">
+      <details>
+        <summary class="box-err"><strong>"There's an issue with the selected model"</strong></summary>
+        <div style="padding:10px 0 0">
+          <p><strong>Ce qui se passe :</strong> Le modèle choisi n'est pas disponible ou n'est pas reconnu par OpenRouter.</p>
+          <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solution :</strong><br>
+          1. Tape <code>/model</code> dans Claude Code<br>
+          2. Choisis l'option 6 "Custom model"<br>
+          3. Tape un autre modèle (ex: <code>qwen/qwen3-coder:free</code>)<br>
+          4. Si ça continue, va dans l'onglet <strong>⚙ Modifier</strong> de cette application, choisis une autre IA, télécharge un nouveau lanceur.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary class="box-err"><strong>"API error · Retrying in 2s · attempt X/10"</strong></summary>
+        <div style="padding:10px 0 0">
+          <p><strong>Ce qui se passe :</strong> L'IA gratuite est surchargée (trop de monde l'utilise en même temps). C'est normal, ça arrive surtout le soir.</p>
+          <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solutions :</strong><br>
+          1. Attends quelques secondes, Claude Code réessaie automatiquement (jusqu'à 10 fois)<br>
+          2. Si ça continue, tape <code>/model</code> → option 6 → tape <code>qwen/qwen3-coder:free</code> (alternative)<br>
+          3. Essaie à un autre moment de la journée (moins de monde)<br>
+          4. Tu peux aussi essayer <code>meta-llama/llama-3.3-70b-instruct:free</code> — très disponible.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary class="box-err"><strong>"openrouter/owl-alpha · API Usage Billing"</strong></summary>
+        <div style="padding:10px 0 0">
+          <p><strong>Ce qui se passe :</strong> Claude Code a sélectionné automatiquement Owl Alpha (le modèle par défaut d'OpenRouter). C'est normal — la connexion fonctionne !</p>
+          <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solution :</strong><br>
+          Tape simplement <code>/model</code> pour choisir ton IA préférée (DeepSeek V4, Qwen3 Coder, etc.). Voir le guide plus haut dans cet onglet.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary class="box-err"><strong>"Authentication failed" ou "Invalid API key"</strong></summary>
+        <div style="padding:10px 0 0">
+          <p><strong>Ce qui se passe :</strong> Ta clé OpenRouter n'est pas reconnue.</p>
+          <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solutions :</strong><br>
+          1. Va sur <strong>openrouter.ai/keys</strong> et vérifie que ta clé est active<br>
+          2. Si elle a expiré ou a été supprimée, crées-en une nouvelle<br>
+          3. Va dans l'onglet <strong>⚙ Modifier</strong> de cette application et colle ta nouvelle clé<br>
+          4. Télécharge un nouveau lanceur et remplace l'ancien sur ton Bureau.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary class="box-err"><strong>"Cannot be loaded because running scripts is disabled"</strong></summary>
+        <div style="padding:10px 0 0">
+          <p><strong>Ce qui se passe :</strong> Windows bloque l'exécution des scripts PowerShell. C'est une sécurité normale de Windows.</p>
+          <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solution :</strong><br>
+          1. Recherche <strong>"PowerShell"</strong> dans le menu Démarrer<br>
+          2. <strong>Clic droit</strong> → <strong>"Exécuter en tant qu'administrateur"</strong><br>
+          3. Tape cette commande et appuie sur Entrée :<br>
+          <code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code><br>
+          4. Réponds <strong>O</strong> (Oui) et appuie sur Entrée<br>
+          5. Relance ton fichier .ps1</p>
+        </div>
+      </details>
+
+      <details>
+        <summary class="box-err"><strong>Le fichier .ps1 s'ouvre dans le Bloc-notes au lieu de s'exécuter</strong></summary>
+        <div style="padding:10px 0 0">
+          <p><strong>Ce qui se passe :</strong> Windows a associé les fichiers .ps1 au Bloc-notes au lieu de PowerShell.</p>
+          <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solution :</strong><br>
+          Utilise toujours le <strong>clic droit</strong> sur le fichier → <strong>"Exécuter avec PowerShell"</strong>.<br>
+          Ne double-clique <strong>jamais</strong> sur un fichier .ps1 — ça l'ouvre dans le Bloc-notes.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary class="box-err"><strong>Claude Code demande de se connecter / "Login to continue"</strong></summary>
+        <div style="padding:10px 0 0">
+          <p><strong>Ce qui se passe :</strong> Claude Code détecte un conflit entre ta session Anthropic et la config OpenRouter.</p>
+          <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solution :</strong><br>
+          1. Dans Claude Code, tape <code>/logout</code> et appuie sur Entrée<br>
+          2. Ferme la fenêtre PowerShell/terminal<br>
+          3. Relance ton IA avec le fichier <strong>Lancer Claude Code.ps1</strong> sur ton Bureau</p>
+        </div>
+      </details>
+
+      <details>
+        <summary class="box-err"><strong>L'IA répond lentement ou "timeout"</strong></summary>
+        <div style="padding:10px 0 0">
+          <p><strong>Ce qui se passe :</strong> Le modèle gratuit est saturé (trop d'utilisateurs en même temps). Les modèles gratuits ont des files d'attente.</p>
+          <p style="font-size:12px;color:var(--muted);line-height:1.7"><strong style="color:var(--accent)">Solutions :</strong><br>
+          1. Essaie <code>/model</code> et passe sur <strong>Llama 3.3 70B</strong> (<code>meta-llama/llama-3.3-70b-instruct:free</code>) — il est souvent plus disponible<br>
+          2. Le <strong>Qwen3 Coder</strong> est aussi une bonne alternative quand DeepSeek est saturé<br>
+          3. Évite les heures de pointe (soirées) si possible<br>
+          4. Tape <code>/clear</code> pour réduire la charge de la conversation</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+</div>
+
+<!-- ====== MODAL : INFO AVANT OUVERTURE D'OPENROUTER ====== -->
+<div class="modal-overlay" id="or-modal" onclick="if(event.target===this) closeOrModal()">
+  <div class="modal-box">
+    <div class="modal-title">ℹ Avant d'ouvrir OpenRouter</div>
+    <div class="box-info" style="margin-bottom:10px">
+      <strong>Limites quotidiennes des modèles gratuits (:free)</strong><br>
+      Sur OpenRouter, la limite de requêtes/jour des modèles <code style="background:var(--bg);color:var(--warn);font-family:'Courier New',monospace;padding:1px 5px">:free</code> dépend des crédits que tu as achetés : moins de 10 crédits achetés → <strong>50 requêtes/jour</strong> ; à partir de 10 crédits achetés → <strong style="color:var(--accent)">1000 requêtes/jour</strong>.
+    </div>
+    <div class="box-warn" style="margin:0">
+      <div class="box-warn-title">⚠ Important</div>
+      <p style="font-size:12px;line-height:1.7;color:#ffddaa">Un minimum de <strong style="color:var(--warn)">5€ de crédit</strong> sur ton compte OpenRouter est nécessaire pour pouvoir utiliser les modèles — <strong>y compris les gratuits</strong> — avec Claude Code.</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeOrModal()" style="flex:1">Annuler</button>
+      <button class="btn btn-blue" onclick="confirmOpenOr()" style="flex:2">✓ Compris — Ouvrir OpenRouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<div class="footer">
+  <span>STRAMM-<span class="fa">FUSION</span></span>
+  <span>V2 • Clé locale • Zéro tracking • 100% gratuit</span>
+</div>
+
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT — Application complète
+     ============================================================ -->
+<script>
+/* ============================================================
+   ÉTAT GLOBAL & PERSISTANCE (localStorage)
+   ============================================================ */
+var S = {
+  key:  localStorage.getItem('cc_key')  || '',
+  model: localStorage.getItem('cc_model') || 'deepseek/deepseek-v4-flash',
+  extraModels: JSON.parse(localStorage.getItem('cc_extra') || '[]'),
+  defaultFree: localStorage.getItem('cc_default_free') || '',
+  defaultPaid: localStorage.getItem('cc_default_paid') || '',
+  cfgKey: '',
+  cfgModel: '',
+  step: 1,
+  keyTested: false
+};
+
+/* Liste dédupliquée : IA par défaut en premier, puis les défauts gratuit/payant, puis les IA supplémentaires cochées */
+function modelsList(){
+  var list = [S.model];
+  if(S.defaultFree && list.indexOf(S.defaultFree) === -1) list.push(S.defaultFree);
+  if(S.defaultPaid && list.indexOf(S.defaultPaid) === -1) list.push(S.defaultPaid);
+  S.extraModels.forEach(function(id){
+    if(list.indexOf(id) === -1) list.push(id);
+  });
+  return list;
+}
+
+var MODEL_TIPS = {
+  'deepseek/deepseek-v4-flash': 'DeepSeek V4 Flash est le meilleur rapport qualité/prix pour Claude Code. Raisonnement puissant, excellent en code, 1M tokens de contexte disponible. C\'est notre recommandation numéro 1.',
+  'qwen/qwen3-coder:free': 'Qwen3 Coder est un modèle spécialisé dans le code avec 1M tokens de contexte. Développé par Alibaba, il est excellent pour les tâches de programmation et une super alternative si DeepSeek est saturé.',
+  'openrouter/owl-alpha': 'Owl Alpha est le modèle officiel d\'OpenRouter, spécialement conçu pour fonctionner avec Claude Code. C\'est le choix le plus sûr pour démarrer, même s\'il est moins puissant que DeepSeek.',
+  'poolside/laguna-m.1:free': 'Laguna M.1 est développé par Poolside, une société spécialisée en agents de code. Il est optimisé pour lire, modifier et créer des fichiers — parfait pour Claude Code.',
+  'nvidia/nemotron-3-ultra-550b-a55b:free': 'Nemotron 3 Ultra de NVIDIA est un très grand modèle (550 milliards de paramètres) avec 1 million de tokens de contexte. Gratuit, puissant en raisonnement et en code — une excellente alternative gratuite à DeepSeek.',
+  'nvidia/nemotron-3-super-120b-a12b:free': 'Nemotron Super de NVIDIA est un modèle hybride très efficace avec 1 million de tokens de contexte. Excellent pour les tâches longues et complexes.',
+  'openai/gpt-oss-120b:free': 'GPT-OSS 120B est un modèle open-source d\'OpenAI avec 120 milliards de paramètres. Très puissant pour le code, la rédaction et le raisonnement complexe.',
+  'meta-llama/llama-3.3-70b-instruct:free': 'Llama 3.3 70B de Meta est un modèle polyvalent et TRÈS DISPONIBLE sur OpenRouter. Idéal quand les autres modèles sont surchargés — excellent plan de secours.',
+  'google/gemma-4-31b-it:free': 'Gemma 4 31B de Google est multimodal et supporte plus de 140 langues. Bon équilibre général pour un modèle gratuit.'
+};
+
+/* ---------- Persistance automatique ---------- */
+function saveState(){
+  try{
+    localStorage.setItem('cc_key', S.key);
+    localStorage.setItem('cc_model', S.model);
+    localStorage.setItem('cc_extra', JSON.stringify(S.extraModels));
+    localStorage.setItem('cc_default_free', S.defaultFree || '');
+    localStorage.setItem('cc_default_paid', S.defaultPaid || '');
+  }catch(e){}
+}
+
+/* ============================================================
+   MODAL — INFO AVANT OUVERTURE D'OPENROUTER (limites + crédit min.)
+   ============================================================ */
+function openOrModal(){
+  document.getElementById('or-modal').classList.add('vis');
+}
+function closeOrModal(){
+  document.getElementById('or-modal').classList.remove('vis');
+}
+function confirmOpenOr(){
+  window.open('https://openrouter.ai/keys','_blank');
+  closeOrModal();
+}
+
+/* ============================================================
+   UTILITAIRES
+   ============================================================ */
+function toggleVis(id, btn){
+  var inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? 'Afficher' : 'Masquer';
+}
+
+function maskKey(k){
+  if(!k || k.length < 10) return k;
+  return k.substring(0,8) + '...' + k.slice(-4);
+}
+
+function download(content, filename){
+  var blob = new Blob([content], {type:'text/plain;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+
+function setKeyStatus(dotId, msgId, v, ok){
+  var dot = document.getElementById(dotId);
+  var msg = document.getElementById(msgId);
+  if(!v){
+    dot.className = 'dot';
+    msg.style.color = 'var(--muted)';
+    msg.textContent = 'En attente de ta clé...';
+    return;
+  }
+  dot.className = 'dot ' + (ok ? 'ok' : 'err');
+  msg.style.color = ok ? 'var(--accent)' : 'var(--err)';
+  msg.textContent = ok ? '✓ Clé reconnue et valide !' : '✗ Format incorrect — la clé doit commencer par sk-or-';
+}
+
+/* ============================================================
+   ÉCRAN 1 : GESTION DE LA CLÉ API AVEC TEST RÉEL
+   ============================================================ */
+function onKeyInput(){
+  var v = document.getElementById('api-key').value.trim();
+  S.key = v;
+  S.keyTested = false;
+  var ok = v.indexOf('sk-or-') === 0 && v.length > 8;
+  setKeyStatus('k-dot','k-msg', v, ok);
+  document.getElementById('btn-s1').disabled = !ok;
+  document.getElementById('btn-test-key').disabled = !ok;
+  document.getElementById('btn-skip-test').style.display = 'none';
+  saveState();
+  syncCfgDisplay();
+}
+
+function testKey(){
+  var key = S.key;
+  if(!key || key.indexOf('sk-or-') !== 0){
+    document.getElementById('k-dot').className = 'dot err';
+    document.getElementById('k-msg').textContent = '✗ Format de clé invalide';
+    document.getElementById('k-msg').style.color = 'var(--err)';
+    return;
+  }
+
+  var btn = document.getElementById('btn-test-key');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Test en cours...';
+  document.getElementById('k-dot').className = 'dot';
+  document.getElementById('k-msg').textContent = 'Vérification de ta clé auprès d\'OpenRouter...';
+  document.getElementById('k-msg').style.color = 'var(--muted)';
+
+  // Ping réel vers OpenRouter
+  fetch('https://openrouter.ai/api/v1/auth/key', {
+    method: 'GET',
+    headers: { 'Authorization': 'Bearer ' + key }
+  })
+  .then(function(res){
+    if(res.ok){
+      S.keyTested = true;
+      document.getElementById('k-dot').className = 'dot ok';
+      document.getElementById('k-msg').textContent = '✓ Clé valide ! Confirmée par OpenRouter ✅';
+      document.getElementById('k-msg').style.color = 'var(--accent)';
+      document.getElementById('btn-s1').disabled = false;
+      document.getElementById('btn-skip-test').style.display = 'none';
+    } else if(res.status === 401){
+      document.getElementById('k-dot').className = 'dot err';
+      document.getElementById('k-msg').textContent = '✗ Clé refusée par OpenRouter (401) — vérifie ta clé sur openrouter.ai/keys';
+      document.getElementById('k-msg').style.color = 'var(--err)';
+      document.getElementById('btn-skip-test').style.display = 'inline-block';
+    } else {
+      document.getElementById('k-dot').className = 'dot warn';
+      document.getElementById('k-msg').textContent = '⚠ Serveur OpenRouter a répondu ' + res.status + ' — ta clé est peut-être bonne, réessaie';
+      document.getElementById('k-msg').style.color = 'var(--warn)';
+      document.getElementById('btn-skip-test').style.display = 'inline-block';
+    }
+  })
+  .catch(function(){
+    // Erreur réseau — pas forcément la faute de la clé
+    document.getElementById('k-dot').className = 'dot warn';
+    document.getElementById('k-msg').textContent = '⚠ Impossible de contacter OpenRouter (connexion internet ?). Tu peux passer cette étape.';
+    document.getElementById('k-msg').style.color = 'var(--warn)';
+    document.getElementById('btn-skip-test').style.display = 'inline-block';
+  })
+  .finally(function(){
+    btn.innerHTML = '🔍 Tester ma clé';
+    btn.disabled = false;
+  });
+}
+
+function skipTest(){
+  S.keyTested = true;
+  document.getElementById('k-dot').className = 'dot ok';
+  document.getElementById('k-msg').textContent = '✓ Test ignoré — on continue !';
+  document.getElementById('k-msg').style.color = 'var(--accent)';
+  document.getElementById('btn-s1').disabled = false;
+  document.getElementById('btn-skip-test').style.display = 'none';
+}
+
+/* ============================================================
+   ÉCRAN 2 : SÉLECTION DU MODÈLE
+   ============================================================ */
+function selModel(id, cardId){
+  document.querySelectorAll('.mc').forEach(function(c){ c.classList.remove('sel'); });
+  var card = document.getElementById(cardId);
+  card.classList.add('sel');
+  // Restaurer la classe reco si c'est DeepSeek
+  if(cardId === 'm-deepseek') card.classList.add('reco');
+  if(cardId !== 'm-cust') document.getElementById('custom-m').value = '';
+  S.model = id;
+  saveState();
+  refreshExtraGrid();
+  var tip = document.getElementById('model-tip');
+  var tipText = document.getElementById('model-tip-text');
+  if(MODEL_TIPS[id]){
+    tipText.textContent = MODEL_TIPS[id];
+    tip.classList.add('vis');
+  } else {
+    tip.classList.remove('vis');
+  }
+}
+
+function refreshExtraGrid(){
+  renderOrCatalog('or');
+  renderOrCatalog('orc');
+}
+
+/* ============================================================
+   CATALOGUE OPENROUTER EN DIRECT — accès à toutes les IA, sans limite
+   ============================================================ */
+var orCatalog = null;        // tableau {id, name, ctx, free, ...} une fois chargé
+var orCatalogPromise = null;
+var orCatalogFailed = false;
+
+/* Paliers discrets pour les curseurs (index de slider -> valeur réelle) */
+var CTX_STEPS = [0, 4000, 8000, 16000, 32000, 64000, 128000, 200000, 256000, 512000, 1000000, 2000000];
+var PRICE_STEPS = [0.05, 0.1, 0.25, 0.5, 1, 2, 5, 10, 20, 50, 100, 999999];
+
+/* Catégories estimées (heuristique par mots-clés — l'API OpenRouter ne fournit pas de catégorie) */
+var CATS = [
+  { key:'code', test:function(m){ return /\bcod(e|er|ing)\b|coder|program|starcoder|codestral/i.test(m.id + ' ' + m.name + ' ' + m.desc); } },
+  { key:'reasoning', test:function(m){ return /reason|\bthink|\bmath\b|logic|\br1\b|\bo1\b|\bo3\b|qwq/i.test(m.id + ' ' + m.name + ' ' + m.desc); } },
+  { key:'writing', test:function(m){ return /writ|content|\bseo\b|copywrit|\bblog\b|creative|article/i.test(m.id + ' ' + m.name + ' ' + m.desc); } },
+  { key:'vision', test:function(m){ return m.vision || /vision|\bvl\b|multimodal|\bimage\b/i.test(m.id + ' ' + m.name); } },
+  { key:'fast', test:function(m){ return /flash|\bmini\b|\blite\b|\bnano\b|\bsmall\b|\blight\b/i.test(m.id + ' ' + m.name); } },
+  { key:'general', test:function(){ return true; } }
+];
+function catMatch(m, key){
+  if(key === 'all') return true;
+  var c = CATS.filter(function(c){ return c.key === key; })[0];
+  return c ? c.test(m) : true;
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+function formatOrPrice(pricePerToken){
+  if(!pricePerToken || pricePerToken <= 0) return 'Gratuit';
+  var per1m = pricePerToken * 1000000;
+  return '$' + (per1m < 0.01 ? per1m.toFixed(4) : per1m.toFixed(2));
+}
+
+function formatOrCtx(ctx){
+  if(!ctx) return '—';
+  return ctx >= 1000000 ? (ctx/1000000) + 'M' : Math.round(ctx/1000) + 'K';
+}
+
+function formatCtxStepLabel(v){
+  return v <= 0 ? 'Aucun minimum' : '≥ ' + formatOrCtx(v);
+}
+function formatPriceStepLabel(v){
+  return v >= 999999 ? 'Illimité' : '≤ $' + (v < 1 ? v.toFixed(2) : v.toFixed(0));
+}
+
+function loadOpenRouterCatalog(){
+  if(orCatalogPromise) return orCatalogPromise;
+  orCatalogPromise = fetch('https://openrouter.ai/api/v1/models')
+    .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function(json){
+      var data = (json && json.data) || [];
+      orCatalog = data.map(function(m){
+        var promptPrice = m.pricing ? parseFloat(m.pricing.prompt || '0') : 0;
+        var complPrice = m.pricing ? parseFloat(m.pricing.completion || '0') : 0;
+        var isFree = (m.id && m.id.indexOf(':free') !== -1) || (promptPrice === 0 && complPrice === 0);
+        var modality = (m.architecture && m.architecture.modality) || '';
+        return {
+          id: m.id, name: m.name || m.id, ctx: m.context_length || 0, free: !!isFree,
+          promptPrice: promptPrice, complPrice: complPrice,
+          desc: m.description || '', vision: modality.indexOf('image') !== -1
+        };
+      }).sort(function(a,b){ return a.name.localeCompare(b.name); });
+      ensureDefaults();
+      renderOrCatalog('or');
+      renderOrCatalog('orc');
+      return orCatalog;
+    })
+    .catch(function(err){
+      orCatalogFailed = true;
+      renderOrCatalog('or');
+      renderOrCatalog('orc');
+      throw err;
+    });
+  return orCatalogPromise;
+}
+
+/* ---------- IA par défaut : gratuite / payante ---------- */
+function bestFreeGuess(){
+  if(!orCatalog) return S.defaultFree || 'nvidia/nemotron-3-ultra-550b-a55b:free';
+  var free = orCatalog.filter(function(m){ return m.free; });
+  if(!free.length) return S.defaultFree || 'nvidia/nemotron-3-ultra-550b-a55b:free';
+  free = free.slice().sort(function(a,b){ return b.ctx - a.ctx; });
+  return free[0].id;
+}
+function bestPaidGuess(){
+  if(!orCatalog) return S.defaultPaid || 'deepseek/deepseek-v4-flash';
+  var paid = orCatalog.filter(function(m){ return !m.free; });
+  if(!paid.length) return S.defaultPaid || 'deepseek/deepseek-v4-flash';
+  var curated = paid.filter(function(m){ return /deepseek|claude|gpt-5|gpt-4|gemini|qwen3-coder/i.test(m.id); });
+  var pool = (curated.length ? curated : paid).slice().sort(function(a,b){ return b.ctx - a.ctx; });
+  return pool[0].id;
+}
+function ensureDefaults(){
+  if(!S.defaultFree) S.defaultFree = bestFreeGuess();
+  if(!S.defaultPaid) S.defaultPaid = bestPaidGuess();
+}
+function setDefaultFree(id){ S.defaultFree = id; saveState(); renderOrCatalog('or'); renderOrCatalog('orc'); checkRegen(); }
+function setDefaultPaid(id){ S.defaultPaid = id; saveState(); renderOrCatalog('or'); renderOrCatalog('orc'); checkRegen(); }
+
+function renderOrCatalog(prefix){
+  var searchEl = document.getElementById(prefix + '-search');
+  var statusEl = document.getElementById(prefix + '-status');
+  var resultsEl = document.getElementById(prefix + '-results');
+  if(!searchEl || !statusEl || !resultsEl) return; // ce panneau n'est pas dans le DOM (autre écran)
+
+  ensureDefaults();
+  var fFree = document.getElementById(prefix + '-default-free-name');
+  var fPaid = document.getElementById(prefix + '-default-paid-name');
+  if(fFree) fFree.textContent = modelLabel(S.defaultFree);
+  if(fPaid) fPaid.textContent = modelLabel(S.defaultPaid);
+
+  var catEl = document.getElementById(prefix + '-cat');
+  var fpEl = document.getElementById(prefix + '-freepaid');
+  var sortEl = document.getElementById(prefix + '-sort');
+  var ctxEl = document.getElementById(prefix + '-ctx-slider');
+  var priceInEl = document.getElementById(prefix + '-price-in-slider');
+  var priceOutEl = document.getElementById(prefix + '-price-out-slider');
+  var ctxMin = ctxEl ? CTX_STEPS[parseInt(ctxEl.value, 10)] : 0;
+  var priceInMax = priceInEl ? PRICE_STEPS[parseInt(priceInEl.value, 10)] : 999999;
+  var priceOutMax = priceOutEl ? PRICE_STEPS[parseInt(priceOutEl.value, 10)] : 999999;
+  var ctxLbl = document.getElementById(prefix + '-ctx-label'); if(ctxLbl) ctxLbl.textContent = formatCtxStepLabel(ctxMin);
+  var piLbl = document.getElementById(prefix + '-price-in-label'); if(piLbl) piLbl.textContent = formatPriceStepLabel(priceInMax);
+  var poLbl = document.getElementById(prefix + '-price-out-label'); if(poLbl) poLbl.textContent = formatPriceStepLabel(priceOutMax);
+
+  if(orCatalogFailed){
+    statusEl.textContent = '⚠ Catalogue OpenRouter injoignable (pas de connexion ?). Tape un identifiant exact dans "Autre modèle" ci-dessus.';
+    resultsEl.innerHTML = '';
+    return;
+  }
+  if(!orCatalog){
+    statusEl.textContent = 'Chargement du catalogue OpenRouter...';
+    resultsEl.innerHTML = '';
+    return;
+  }
+
+  var cat = catEl ? catEl.value : 'all';
+  var fp = fpEl ? fpEl.value : 'all';
+  var sort = sortEl ? sortEl.value : 'name';
+  var term = searchEl.value.trim().toLowerCase();
+
+  var list = orCatalog.filter(function(m){
+    if(fp === 'free' && !m.free) return false;
+    if(fp === 'paid' && m.free) return false;
+    if(!catMatch(m, cat)) return false;
+    if(ctxMin > 0 && m.ctx < ctxMin) return false;
+    if(priceInMax < 999999 && (m.promptPrice * 1000000) > priceInMax) return false;
+    if(priceOutMax < 999999 && (m.complPrice * 1000000) > priceOutMax) return false;
+    if(term && m.name.toLowerCase().indexOf(term) === -1 && m.id.toLowerCase().indexOf(term) === -1) return false;
+    return true;
+  });
+
+  list = list.slice().sort(function(a,b){
+    switch(sort){
+      case 'ctx-desc': return b.ctx - a.ctx;
+      case 'price-in-asc': return a.promptPrice - b.promptPrice;
+      case 'price-out-asc': return a.complPrice - b.complPrice;
+      case 'free-first': return (a.free === b.free) ? a.name.localeCompare(b.name) : (a.free ? -1 : 1);
+      default: return a.name.localeCompare(b.name);
+    }
+  });
+
+  var LIMIT = 150;
+  statusEl.textContent = list.length + ' modèle(s) trouvé(s)' + (list.length > LIMIT ? ' — affine ta recherche (150 premiers affichés)' : '') + '. Clique sur une ligne pour ajouter/retirer, ou sur 🆓/💰 pour la définir par défaut.';
+
+  if(list.length === 0){
+    resultsEl.innerHTML = '<p style="font-size:11px;color:var(--muted);grid-column:1/-1">Aucun résultat pour ces filtres.</p>';
+    return;
+  }
+
+  resultsEl.innerHTML = list.slice(0, LIMIT).map(function(m){
+    var isDefault = m.id === S.model;
+    var isSel = isDefault || S.extraModels.indexOf(m.id) !== -1 || m.id === S.defaultFree || m.id === S.defaultPaid;
+    var cls = 'or-row' + (isSel ? ' sel' : '');
+    var style = isDefault ? 'opacity:.4;pointer-events:none' : '';
+    var orUrl = 'https://openrouter.ai/' + m.id.split(':')[0];
+    var isFreeDefault = m.id === S.defaultFree;
+    var isPaidDefault = m.id === S.defaultPaid;
+    var defBtn = m.free
+      ? '<button type="button" class="or-def-btn' + (isFreeDefault ? ' active' : '') + '" onclick="event.stopPropagation();setDefaultFree(\'' + escapeHtml(m.id).replace(/'/g,"\\'") + '\')" title="Définir comme IA gratuite par défaut">🆓</button>'
+      : '<button type="button" class="or-def-btn' + (isPaidDefault ? ' active' : '') + '" onclick="event.stopPropagation();setDefaultPaid(\'' + escapeHtml(m.id).replace(/'/g,"\\'") + '\')" title="Définir comme IA payante par défaut">💰</button>';
+    return '<div class="' + cls + '" style="' + style + '" data-mid="' + escapeHtml(m.id) + '" onclick="toggleExtraCatalog(this.getAttribute(\'data-mid\'))">'
+      + '<span class="or-check">' + (isSel ? '✓' : '') + '</span>'
+      + '<span class="or-name"><span class="or-name-txt">' + escapeHtml(m.name) + '</span><span class="or-id-txt">' + escapeHtml(m.id) + '</span></span>'
+      + '<span class="or-col">' + formatOrCtx(m.ctx) + '</span>'
+      + '<span class="or-col' + (m.free ? ' free' : '') + '">' + formatOrPrice(m.promptPrice) + '</span>'
+      + '<span class="or-col' + (m.free ? ' free' : '') + '">' + formatOrPrice(m.complPrice) + '</span>'
+      + defBtn
+      + '<a class="or-link" href="' + escapeHtml(orUrl) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Voir la fiche complète sur OpenRouter (jetons/semaine, latence, débit, tarif à jour)">↗</a>'
+      + '</div>';
+  }).join('');
+}
+
+function toggleExtraCatalog(id){
+  if(id === S.model) return;
+  var idx = S.extraModels.indexOf(id);
+  if(idx === -1) S.extraModels.push(id); else S.extraModels.splice(idx, 1);
+  saveState();
+  renderOrCatalog('or');
+  renderOrCatalog('orc');
+  checkRegen();
+}
+
+function focusCustom(){
+  document.querySelectorAll('.mc').forEach(function(c){ c.classList.remove('sel'); });
+  document.getElementById('m-cust').classList.add('sel');
+  document.getElementById('model-tip').classList.remove('vis');
+  document.getElementById('custom-m').focus();
+}
+
+function customM(){
+  var v = document.getElementById('custom-m').value.trim();
+  if(v) S.model = v;
+  document.querySelectorAll('.mc').forEach(function(c){ c.classList.remove('sel'); });
+  document.getElementById('m-cust').classList.add('sel');
+  saveState();
+  refreshExtraGrid();
+}
+
+/* ============================================================
+   ÉCRAN 4 : CONFIG (CHANGEMENT)
+   ============================================================ */
+function onCfgKeyInput(){
+  var v = document.getElementById('cfg-key').value.trim();
+  S.cfgKey = v;
+  var ok = v.indexOf('sk-or-') === 0 && v.length > 8;
+  setKeyStatus('ck-dot','ck-msg', v, ok);
+  document.getElementById('btn-cfg-key').disabled = !ok;
+}
+
+function selCfgModel(id, cardId){
+  document.querySelectorAll('.mmc').forEach(function(c){ c.classList.remove('sel'); });
+  document.getElementById(cardId).classList.add('sel');
+  document.getElementById('cfg-custom-m').value = '';
+  S.cfgModel = id;
+  document.getElementById('btn-cfg-model').disabled = false;
+}
+
+function cfgCustomM(){
+  var v = document.getElementById('cfg-custom-m').value.trim();
+  S.cfgModel = v;
+  document.querySelectorAll('.mmc').forEach(function(c){ c.classList.remove('sel'); });
+  document.getElementById('cm-cust').classList.add('sel');
+  document.getElementById('btn-cfg-model').disabled = !v;
+}
+
+function applyNewKey(){
+  S.key = S.cfgKey;
+  saveState();
+  syncCfgDisplay();
+  checkRegen();
+  document.getElementById('cfg-key').value = '';
+  document.getElementById('ck-dot').className = 'dot ok';
+  document.getElementById('ck-msg').textContent = '✓ Clé appliquée !';
+  document.getElementById('ck-msg').style.color = 'var(--accent)';
+  document.getElementById('btn-cfg-key').disabled = true;
+}
+
+function applyNewModel(){
+  S.model = S.cfgModel;
+  saveState();
+  syncCfgDisplay();
+  checkRegen();
+}
+
+function syncCfgDisplay(){
+  if(S.key) document.getElementById('cfg-key-display').textContent = maskKey(S.key);
+  if(S.model) document.getElementById('cfg-model-display').textContent = S.model;
+  renderOrCatalog('or');
+  renderOrCatalog('orc');
+}
+
+function checkRegen(){
+  if(S.key && S.model){
+    var ml = modelsList();
+    document.getElementById('regen-box').classList.add('vis');
+    document.getElementById('regen-key').textContent = maskKey(S.key);
+    document.getElementById('regen-model').textContent = ml.map(modelLabel).join(' · ');
+  }
+}
+
+/* ============================================================
+   NAVIGATION ENTRE ONGLETS
+   ============================================================ */
+function goTab(n){
+  if(n <= 3 && S.step < n) return;
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('sc-' + n).classList.add('active');
+  document.getElementById('tab-' + n).classList.add('active');
+}
+
+function next(from){
+  if(from === 1){
+    S.step = Math.max(S.step, 2);
+    document.getElementById('tab-2').classList.remove('locked');
+    document.getElementById('tab-1').classList.add('done');
+    goTab(2);
+  } else if(from === 2){
+    S.step = Math.max(S.step, 3);
+    document.getElementById('tab-3').classList.remove('locked');
+    document.getElementById('tab-2').classList.add('done');
+    document.getElementById('sum-key').textContent = maskKey(S.key);
+    var ml = modelsList();
+    document.getElementById('sum-model').textContent = modelLabel(S.model) + (ml.length > 1 ? ' (+' + (ml.length - 1) + ' autre(s) IA installée(s))' : '');
+    syncCfgDisplay();
+    // Mettre à jour le récap des outils
+    document.getElementById('sum-tools').textContent = 'VS Code · Node.js · Git · Claude Code (détection auto)';
+    goTab(3);
+  }
+}
+
+function modelLabel(id){
+  var labels = {
+    'deepseek/deepseek-v4-flash': 'DeepSeek V4 Flash (Payant)',
+    'qwen/qwen3-coder:free': 'Qwen3 Coder',
+    'openrouter/owl-alpha': 'Owl Alpha',
+    'poolside/laguna-m.1:free': 'Laguna M.1',
+    'nvidia/nemotron-3-ultra-550b-a55b:free': 'Nemotron Ultra',
+    'nvidia/nemotron-3-super-120b-a12b:free': 'Nemotron Super',
+    'openai/gpt-oss-120b:free': 'GPT-OSS 120B',
+    'meta-llama/llama-3.3-70b-instruct:free': 'Llama 3.3 70B',
+    'google/gemma-4-31b-it:free': 'Gemma 4 31B'
+  };
+  if(labels[id]) return labels[id];
+  if(orCatalog){
+    var found = orCatalog.filter(function(m){ return m.id === id; })[0];
+    if(found) return found.name;
+  }
+  return id;
+}
+
+/* ============================================================
+   GÉNÉRATION PS1 — Version V2 avec détection intelligente
+   ============================================================ */
+/* Échappe une chaîne pour l'insérer dans une chaîne PowerShell entre guillemets simples '...' */
+function psStr(s){ return String(s).replace(/'/g, "''"); }
+
+/* Construit les lignes PS déclarant le tableau $installedModels (Id + Label) */
+function buildModelsPSLines(models){
+  var lines = ['$installedModels = @('];
+  models.forEach(function(id, i){
+    lines.push("  [PSCustomObject]@{ Id = '" + psStr(id) + "'; Label = '" + psStr(modelLabel(id)) + "' }" + (i < models.length - 1 ? ',' : ''));
+  });
+  lines.push(')');
+  return lines;
+}
+
+/* Construit les lignes PS du menu de choix d'IA + écriture dynamique de settings.json + lancement.
+   Utilise ConvertTo-Json (pas de heredoc imbriqué) pour rester compatible avec le heredoc englobant. */
+function buildMenuAndLaunchLines(key){
+  return [
+'$apiKey = \'' + psStr(key) + '\'',
+'Write-Host ""',
+'Write-Host "=== Choisis ton IA (meme cle OpenRouter) ===" -ForegroundColor Cyan',
+'for ($i=0; $i -lt $installedModels.Count; $i++) {',
+'  Write-Host ("  [{0}] {1}" -f ($i+1), $installedModels[$i].Label) -ForegroundColor White',
+'}',
+'Write-Host ("  [Entree] = IA par defaut : " + $installedModels[0].Label) -ForegroundColor DarkGray',
+'$choice = Read-Host "Ton choix"',
+'$chosenModel = $installedModels[0].Id',
+'$chosenLabel = $installedModels[0].Label',
+'if ($choice -match "^[0-9]+$") {',
+'  $n = [int]$choice',
+'  if ($n -ge 1 -and $n -le $installedModels.Count) {',
+'    $chosenModel = $installedModels[$n-1].Id',
+'    $chosenLabel = $installedModels[$n-1].Label',
+'  }',
+'}',
+'Write-Host ("IA active : " + $chosenLabel) -ForegroundColor Green',
+'Write-Host ""',
+'$settingsObj = [PSCustomObject]@{ env = [PSCustomObject]@{ ANTHROPIC_BASE_URL = "https://openrouter.ai/api"; ANTHROPIC_AUTH_TOKEN = $apiKey; ANTHROPIC_API_KEY = ""; ANTHROPIC_MODEL = $chosenModel; OPENROUTER_API_KEY = $apiKey } }',
+'$settingsContent = $settingsObj | ConvertTo-Json -Depth 5',
+'$claudeDir = "$env:USERPROFILE\\.claude"',
+'if (-not (Test-Path $claudeDir)) { New-Item -ItemType Directory -Path $claudeDir -Force | Out-Null }',
+'[System.IO.File]::WriteAllText((Join-Path $claudeDir "settings.json"), $settingsContent, [System.Text.Encoding]::UTF8)',
+'Write-Host "Commandes utiles (en francais) :" -ForegroundColor DarkGray',
+'Write-Host "  /model -> Changer d IA en cours de session (tape /model, choisis 6, puis colle un identifiant)" -ForegroundColor DarkGray',
+'Write-Host "  /clear -> Effacer la conversation" -ForegroundColor DarkGray',
+'Write-Host "  /logout -> Si ca demande de se connecter" -ForegroundColor DarkGray',
+'Write-Host "  /help  -> Aide complete" -ForegroundColor DarkGray',
+'Write-Host ""',
+'$claudeExe = "$env:USERPROFILE\\.local\\bin\\claude.exe"',
+'code C:\\Projets_IA',
+'Start-Sleep -Seconds 2',
+'if (Test-Path $claudeExe) { & $claudeExe } else { claude }'
+  ];
+}
+
+function buildSettingsJson(key, model){
+  return JSON.stringify({
+    env: {
+      ANTHROPIC_BASE_URL: 'https://openrouter.ai/api',
+      ANTHROPIC_AUTH_TOKEN: key,
+      ANTHROPIC_API_KEY: '',
+      ANTHROPIC_MODEL: model,
+      OPENROUTER_API_KEY: key
+    }
+  }, null, 2);
+}
+
+function buildSetupPS1(key, model, models){
+  var sj = buildSettingsJson(key, model);
+  var label = modelLabel(model);
+  var lines = [
+'# Setup_Claude_Code.ps1 - Auto-Setup V2 - STRAMM-FUSION',
+'# Genere automatiquement — tu peux l\'ouvrir avec le Bloc-notes pour verifier.',
+'$host.ui.RawUI.WindowTitle = "Claude Code Auto-Setup V2 - STRAMM-FUSION"',
+'$ErrorActionPreference = "Continue"',
+'',
+'Write-Host ""',
+'Write-Host "==========================================" -ForegroundColor Cyan',
+'Write-Host "   CLAUDE CODE AUTO-SETUP V2" -ForegroundColor Cyan',
+'Write-Host "   STRAMM-FUSION" -ForegroundColor DarkGray',
+'Write-Host "==========================================" -ForegroundColor Cyan',
+'Write-Host ""',
+'',
+'# [1/8] Tentative de deblocage du fichier (securite Windows)',
+'Write-Host "[1/8] Verification du fichier..." -ForegroundColor Yellow',
+'try { Unblock-File -Path $PSCommandPath -ErrorAction SilentlyContinue | Out-Null } catch {}',
+'Write-Host "      OK" -ForegroundColor Green',
+'Write-Host ""',
+'',
+'# [2/8] Privileges administrateur',
+'Write-Host "[2/8] Verification des droits administrateur..." -ForegroundColor Yellow',
+'$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)',
+'if (-NOT $isAdmin) {',
+'  Write-Host "      Relancement en mode Administrateur..." -ForegroundColor Yellow',
+'  $scriptPath = $MyInvocation.MyCommand.Path',
+'  Start-Process PowerShell -Verb RunAs -ArgumentList ("-NoProfile -ExecutionPolicy Bypass -File `"" + $scriptPath + "`"")',
+'  exit',
+'}',
+'Write-Host "      OK - Droits administrateur confirmes" -ForegroundColor Green',
+'Write-Host ""',
+'',
+'# [3/8] Detection des outils deja installes',
+'Write-Host "[3/8] Detection des outils deja installes..." -ForegroundColor Yellow',
+'',
+'$needNode = $true',
+'try { $nodeVer = node --version; if ($nodeVer) { Write-Host "      -> Node.js deja installe : $nodeVer" -ForegroundColor DarkGray; $needNode = $false } } catch {}',
+'if ($needNode) { Write-Host "      -> Node.js sera installe" -ForegroundColor DarkGray }',
+'',
+'$needGit = $true',
+'try { $gitVer = git --version; if ($gitVer) { Write-Host "      -> Git deja installe : $gitVer" -ForegroundColor DarkGray; $needGit = $false } } catch {}',
+'if ($needGit) { Write-Host "      -> Git sera installe" -ForegroundColor DarkGray }',
+'',
+'$needCode = $true',
+'try { $codeVer = code --version 2>&1 | Select-Object -First 1; if ($codeVer) { Write-Host "      -> VS Code deja installe : $codeVer" -ForegroundColor DarkGray; $needCode = $false } } catch {}',
+'if ($needCode) { Write-Host "      -> VS Code sera installe" -ForegroundColor DarkGray }',
+'',
+'Write-Host "      OK - Detection terminee" -ForegroundColor Green',
+'Write-Host ""',
+'',
+'# [4/8] Installation des outils manquants',
+'Write-Host "[4/8] Installation des outils manquants..." -ForegroundColor Yellow',
+'if ($needNode) {',
+'  Write-Host "      Installation de Node.js..." -ForegroundColor DarkGray',
+'  winget install --id OpenJS.NodeJS -e --silent --accept-package-agreements --accept-source-agreements 2>&1 | Out-Null',
+'  Write-Host "      OK - Node.js installe" -ForegroundColor DarkGray',
+'}',
+'if ($needGit) {',
+'  Write-Host "      Installation de Git..." -ForegroundColor DarkGray',
+'  winget install --id Git.Git -e --silent --accept-package-agreements --accept-source-agreements 2>&1 | Out-Null',
+'  Write-Host "      OK - Git installe" -ForegroundColor DarkGray',
+'}',
+'if ($needCode) {',
+'  Write-Host "      Installation de VS Code..." -ForegroundColor DarkGray',
+'  winget install --id Microsoft.VisualStudioCode -e --silent --accept-package-agreements --accept-source-agreements 2>&1 | Out-Null',
+'  Write-Host "      OK - VS Code installe" -ForegroundColor DarkGray',
+'}',
+'if (-not ($needNode -or $needGit -or $needCode)) {',
+'  Write-Host "      Tout est deja installe !" -ForegroundColor Green',
+'}',
+'Write-Host ""',
+'',
+'# [5/8] Claude Code',
+'Write-Host "[5/8] Installation de Claude Code..." -ForegroundColor Yellow',
+'$claudeInstalled = $false',
+'try {',
+'  $claudeCheck = Get-Command claude -ErrorAction SilentlyContinue',
+'  if ($claudeCheck) { $claudeInstalled = $true }',
+'} catch {}',
+'if ($claudeInstalled) {',
+'  Write-Host "      Claude Code deja installe - mise a jour..." -ForegroundColor DarkGray',
+'}',
+'try {',
+'  Invoke-RestMethod https://claude.ai/install.ps1 | Invoke-Expression',
+'} catch {',
+'  Write-Host "      ATTENTION : $($_.Exception.Message)" -ForegroundColor DarkYellow',
+'}',
+'Write-Host "      OK - Claude Code configure" -ForegroundColor Green',
+'Write-Host ""',
+'',
+'# [6/8] PATH systeme',
+'Write-Host "[6/8] Configuration du PATH systeme..." -ForegroundColor Yellow',
+'$claudePath = "C:\\Users\\" + $env:USERNAME + "\\.local\\bin"',
+'$machinePath = [System.Environment]::GetEnvironmentVariable("Path", "Machine")',
+'if ($machinePath -notlike ("*" + $claudePath + "*")) {',
+'  [System.Environment]::SetEnvironmentVariable("Path", $machinePath + ";" + $claudePath, "Machine")',
+'}',
+'$env:Path += ";" + $claudePath',
+'Write-Host "      OK - PATH configure" -ForegroundColor Green',
+'Write-Host ""',
+'',
+'# [7/8] Nettoyage session + configuration OpenRouter',
+'Write-Host "[7/8] Configuration de ton IA (' + label + ')..." -ForegroundColor Yellow',
+'$claudeDir = "$env:USERPROFILE\\.claude"',
+'if (-not (Test-Path $claudeDir)) {',
+'  New-Item -ItemType Directory -Path $claudeDir -Force | Out-Null',
+'}',
+'$authFiles = @("auth.json", ".credentials.json", "session.json", "credentials.json")',
+'foreach ($f in $authFiles) {',
+'  $fp = Join-Path $claudeDir $f',
+'  if (Test-Path $fp) { Remove-Item $fp -Force | Out-Null }',
+'}',
+'',
+'$settingsContent = @\'',
+sj,
+'\'@',
+'$settingsPath = Join-Path $claudeDir "settings.json"',
+'[System.IO.File]::WriteAllText($settingsPath, $settingsContent, [System.Text.Encoding]::UTF8)',
+'Write-Host "      OK - IA configuree : ' + model + '" -ForegroundColor Green',
+'Write-Host ""',
+'',
+'# [8/8] Extension VS Code + raccourci Bureau',
+'Write-Host "[8/8] Extension VS Code et raccourci Bureau..." -ForegroundColor Yellow',
+'try { code --install-extension Anthropic.claude 2>&1 | Out-Null } catch {}',
+'',
+'$projDir = "C:\\Projets_IA"',
+'if (-not (Test-Path $projDir)) { New-Item -ItemType Directory -Path $projDir | Out-Null }',
+'',
+'$desk = [System.Environment]::GetFolderPath("Desktop")',
+'$launcherPath = Join-Path $desk "Lancer Claude Code.ps1"',
+'',
+'$launcherContent = @\'',
+'# Lancer Claude Code.ps1 - Genere par Claude Code Auto-Setup V2 - STRAMM-FUSION',
+'# IA installees avec la meme cle OpenRouter : ' + models.map(modelLabel).join(', '),
+'Write-Host "Demarrage de ton assistant IA..." -ForegroundColor Cyan',
+].concat(buildModelsPSLines(models), buildMenuAndLaunchLines(key), [
+'\'@',
+'[System.IO.File]::WriteAllText($launcherPath, $launcherContent, [System.Text.Encoding]::UTF8)',
+'Write-Host "      OK - Raccourci cree sur le Bureau" -ForegroundColor Green',
+'Write-Host ""',
+'',
+'Write-Host "==========================================" -ForegroundColor Cyan',
+'Write-Host "  INSTALLATION TERMINEE !" -ForegroundColor Green',
+'Write-Host ""',
+'Write-Host "  Ton IA est prete : ' + label + '" -ForegroundColor White',
+'Write-Host ""',
+'Write-Host "  ETAPES SUIVANTES :" -ForegroundColor Yellow',
+'Write-Host "  1. Ferme cette fenetre" -ForegroundColor White',
+'Write-Host "  2. Va sur ton Bureau" -ForegroundColor White',
+'Write-Host "  3. Clic DROIT sur Lancer Claude Code.ps1" -ForegroundColor White',
+'Write-Host "  4. Proprietes -> coche Debloquer si visible -> OK" -ForegroundColor White',
+'Write-Host "  5. Clic DROIT -> Executer avec PowerShell" -ForegroundColor White',
+'Write-Host "==========================================" -ForegroundColor Cyan',
+'Write-Host ""',
+'pause'
+  ]);
+  return lines.join('\r\n');
+}
+
+function buildLauncherPS1(key, models){
+  var lines = [
+'# Lancer Claude Code.ps1 - Genere par Claude Code Auto-Setup V2 - STRAMM-FUSION',
+'# IA installees avec la meme cle OpenRouter : ' + models.map(modelLabel).join(', '),
+'Write-Host "Demarrage de ton assistant IA..." -ForegroundColor Cyan'
+  ].concat(buildModelsPSLines(models), buildMenuAndLaunchLines(key));
+  return lines.join('\r\n');
+}
+
+/* ============================================================
+   ACTIONS DE TÉLÉCHARGEMENT
+   ============================================================ */
+function generateSetup(){
+  download(buildSetupPS1(S.key, S.model, modelsList()), 'Setup_Claude_Code.ps1');
+  document.getElementById('dl-ok').classList.add('vis');
+  document.getElementById('launched-model').textContent = modelLabel(S.model);
+  document.getElementById('btn-gen').textContent = '⬇ Re-télécharger le fichier';
+}
+
+function regenLauncher(){
+  download(buildLauncherPS1(S.key, modelsList()), 'Lancer Claude Code.ps1');
+  document.getElementById('regen-ok').classList.add('vis');
+}
+
+/* ============================================================
+   INITIALISATION — Restauration depuis localStorage
+   ============================================================ */
+(function init(){
+  // Restaurer la clé si elle existe
+  if(S.key){
+    document.getElementById('api-key').value = S.key;
+    var ok = S.key.indexOf('sk-or-') === 0 && S.key.length > 8;
+    setKeyStatus('k-dot','k-msg', S.key, ok);
+    document.getElementById('btn-s1').disabled = !ok;
+    document.getElementById('btn-test-key').disabled = !ok;
+  }
+
+  // Restaurer le modèle sélectionné
+  if(S.model){
+    // Trouver la carte correspondante
+    var modelMap = {
+      'deepseek/deepseek-v4-flash': 'm-deepseek',
+      'qwen/qwen3-coder:free': 'm-qwen',
+      'openrouter/owl-alpha': 'm-owl',
+      'poolside/laguna-m.1:free': 'm-laguna',
+      'nvidia/nemotron-3-ultra-550b-a55b:free': 'm-ultra',
+      'nvidia/nemotron-3-super-120b-a12b:free': 'm-nem',
+      'openai/gpt-oss-120b:free': 'm-gptoss',
+      'meta-llama/llama-3.3-70b-instruct:free': 'm-llama',
+      'google/gemma-4-31b-it:free': 'm-gemma'
+    };
+    var cardId = modelMap[S.model];
+    if(cardId){
+      document.querySelectorAll('.mc').forEach(function(c){ c.classList.remove('sel'); });
+      var card = document.getElementById(cardId);
+      if(card){
+        card.classList.add('sel');
+        if(cardId === 'm-deepseek') card.classList.add('reco');
+      }
+    }
+  }
+
+  // Réafficher le catalogue unifié (IA supplémentaires + défauts gratuit/payant)
+  ensureDefaults();
+  refreshExtraGrid();
+  syncCfgDisplay();
+  checkRegen();
+
+  loadOpenRouterCatalog().catch(function(){ /* déjà géré : message de repli affiché */ });
+})();
+</script>
+</body>
+</html>
